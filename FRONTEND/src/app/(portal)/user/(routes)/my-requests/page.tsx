@@ -1,0 +1,13 @@
+import { PageHeader } from "@/components/layouts/page-header";
+
+export default function Page() {
+  return (
+    <div className="space-y-6">
+      <PageHeader title="My Requests" description="Track statuses, pickup schedules, and required actions." />
+      <div className="rounded-lg border border-dashed bg-background/60 p-10 text-center text-muted-foreground">
+        <h2 className="text-lg font-semibold">My Requests</h2>
+        <p className="mt-2 text-sm">This is a placeholder for the my requests view.</p>
+      </div>
+    </div>
+  );
+}
