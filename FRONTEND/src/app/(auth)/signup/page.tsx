@@ -59,18 +59,6 @@ export default function SignupPage({ searchParams }: { searchParams: { message: 
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
-          <div className="space-y-2 text-left">
-            <label className="text-sm font-medium" htmlFor="secret_code">
-              Admin Secret Code (Optional)
-            </label>
-            <input
-              id="secret_code"
-              name="secret_code"
-              type="password"
-              placeholder="Enter secret code for admin access"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
-          </div>
           <Button className="w-full" type="submit">
             Create account
           </Button>

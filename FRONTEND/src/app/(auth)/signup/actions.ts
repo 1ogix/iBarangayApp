@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 
 // In a real application, this should be an environment variable.
 const ADMIN_SECRET_CODE = "SUPER_SECRET_CODE";
