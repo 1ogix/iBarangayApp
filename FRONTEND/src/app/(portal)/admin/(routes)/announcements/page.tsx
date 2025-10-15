@@ -1,52 +1,108 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { PageHeader } from "@/components/layouts/page-header";
 import { Button } from "@/components/ui/button";
 import { AnnouncementCard } from "@/components/announcement-card";
-import { Announcement } from "@/components/announcement-card";
+import type { Announcement } from "@/components/announcement-card";
 import { AnnouncementForm } from "@/components/announcement-form";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+// import { createClient } from './client';
+import { createClient } from "@/lib/supabase/client";
+
+// Define a more specific type for use in this component
+// that includes the properties from the Supabase table.
+type SupabaseAnnouncement = Announcement & {
+  id: number;
+};
 
 export default function Page() {
+  const supabase = createClient();
   const [isAdding, setIsAdding] = useState(false);
-  const [announcements, setAnnouncements] = useState<Announcement[]>([
-    {
-      title: "Announcement Title 1",
-      content: "This is a placeholder for the announcement content.",
-      imageUrl: "",
-      date: "October 26, 2025",
-    },
-    {
-      title: "Announcement Title 2",
-      content: "This is a placeholder for the announcement content.",
-      imageUrl: "",
-      date: "October 26, 2025",
-    },
-    {
-      title: "Announcement Title 3",
-      content: "This is a placeholder for the announcement content.",
-      imageUrl: "",
-      date: "October 26, 2025",
-    },
-  ]);
-  const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
+  const [announcements, setAnnouncements] = useState<SupabaseAnnouncement[]>([]);
+  const [editingAnnouncement, setEditingAnnouncement] = useState<SupabaseAnnouncement | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleSave = (announcement: Omit<Announcement, 'date'> | Announcement) => {
-    if ('date' in announcement) {
-      setAnnouncements(announcements.map(a => a.title === announcement.title ? { ...announcement } : a));
+  // Function to format date from Supabase
+  const formatSupabaseDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const fetchAnnouncements = useCallback(async () => {
+    setIsLoading(true);
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching announcements:', error);
+      // Handle error display to the user
+    } else if (data) {
+      const formattedData = data.map(item => ({
+        ...item,
+        imageUrl: item.image_url ?? "",
+        date: formatSupabaseDate(item.created_at),
+      }));
+      setAnnouncements(formattedData);
+    }
+    setIsLoading(false);
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, [fetchAnnouncements]);
+
+  const handleSave = async (announcement: Omit<SupabaseAnnouncement, 'date' | 'id'> | SupabaseAnnouncement) => {
+    // Editing an existing announcement
+    if ('id' in announcement && announcement.id) {
+      const { data, error } = await supabase
+        .from('announcements')
+        .update({ title: announcement.title, content: announcement.content, image_url: announcement.imageUrl })
+        .eq('id', announcement.id)
+        .select();
+
+      if (error) {
+        console.error("Error updating announcement:", error);
+      } else if (data) {
+        // Refresh the list to show the updated item
+        await fetchAnnouncements();
+      }
       setEditingAnnouncement(null);
     } else {
-      const newAnnouncementWithDate = {
-        ...announcement,
-        date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      };
-      setAnnouncements([newAnnouncementWithDate, ...announcements]);
+      // Creating a new announcement
+      const { data, error } = await supabase
+        .from('announcements')
+        .insert([{ title: announcement.title, content: announcement.content, image_url: announcement.imageUrl }])
+        .select();
+
+      if (error) {
+        console.error("Error creating announcement:", error);
+      } else if (data) {
+        // Refresh the list to show the new item at the top
+        await fetchAnnouncements();
+      }
       setIsAdding(false);
     }
   };
 
-  const handleDelete = (announcement: Announcement) => {
-    setAnnouncements(announcements.filter(a => a.title !== announcement.title));
+  const handleDelete = async (announcement: SupabaseAnnouncement) => {
+    if (!announcement.id) return;
+
+    const { error } = await supabase
+      .from('announcements')
+      .delete()
+      .eq('id', announcement.id);
+
+    if (error) {
+      console.error("Error deleting announcement:", error);
+    } else {
+      // Refresh the list to remove the deleted item
+      await fetchAnnouncements();
+    }
   };
 
   return (
@@ -66,11 +122,19 @@ export default function Page() {
         />
       )}
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {announcements.map((announcement, i) => (
-          <AnnouncementCard key={i} announcement={announcement} onEdit={setEditingAnnouncement} onDelete={handleDelete} />
-        ))}
-      </div>
+      {isLoading ? (
+        <p>Loading announcements...</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {announcements.map((announcement) => (
+            <AnnouncementCard 
+              key={announcement.id} 
+              announcement={announcement} 
+              onEdit={(ann) => setEditingAnnouncement(ann as SupabaseAnnouncement)} 
+              onDelete={() => handleDelete(announcement)} />
+          ))}
+        </div>
+      )}
 
       {/* Edit Dialog */}
       {editingAnnouncement && (

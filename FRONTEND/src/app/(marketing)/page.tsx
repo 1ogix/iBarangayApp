@@ -1,33 +1,54 @@
 'use client';
 
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AnnouncementCard } from "@/components/announcement-card";
-import { Announcement } from "@/components/announcement-card";
+import type { Announcement } from "@/components/announcement-card";
 import { Newspaper, Briefcase, Database } from "lucide-react";
 import { motion } from "framer-motion";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LandingPage() {
-  const announcements: Announcement[] = [
-    {
-      title: "Community Clean-Up Drive",
-      content: "Join us this Saturday for a community clean-up drive at the central park. Let's keep our barangay clean and green!",
-      imageUrl: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "2023-10-01"
-    },
-    {
-      title: "Barangay Assembly Meeting",
-      content: "The next barangay assembly meeting is scheduled for October 15th at 3 PM in the community hall. All residents are encouraged to attend.",
-      imageUrl: "",
-      date: "2023-10-15"
-    }
-  ];
+  const supabase = createClient();
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const formatSupabaseDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const fetchAnnouncements = useCallback(async () => {
+    setIsLoading(true);
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(3); // Fetch only the 3 most recent announcements
+
+    if (error) {
+      console.error("Error fetching announcements for landing page:", error);
+    } else if (data) {
+      const formattedData = data.map(item => ({
+        ...item,
+        imageUrl: item.image_url ?? "",
+        date: formatSupabaseDate(item.created_at),
+      }));
+      setAnnouncements(formattedData);
+    }
+    setIsLoading(false);
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, [fetchAnnouncements]);
 
   return (
-    <section className="relative flex flex-1 flex-col items-center justify-center gap-8 bg-gradient-to-b from-blue-50 to-white px-6 py-24 text-center">
-      <div className="absolute inset-0 bg-cover bg-center"></div>
-      <div className="absolute inset-0 bg-black/50"></div>
+    <section className="flex flex-1 flex-col items-center gap-8 bg-slate-50 px-6 py-24 text-center">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -40,14 +61,14 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-4xl font-bold sm:text-5xl md:text-6xl text-white">
+          className="text-4xl font-bold text-slate-900 sm:text-5xl md:text-6xl">
           Digitize services for a smarter barangay community.
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-lg text-gray-200">
+          className="text-lg text-slate-600">
           Manage citizen requests, appointments, announcements, and operations in one secure platform. Empower staff with the right tools while giving residents a delightful digital experience.
         </motion.p>
       </motion.div>
@@ -55,7 +76,7 @@ export default function LandingPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="z-10 flex flex-wrap items-center justify-center gap-4">
+        className="flex flex-wrap items-center justify-center gap-4">
         <Button asChild size="lg">
           <Link href="/login">Access Portal</Link>
         </Button>
@@ -67,8 +88,7 @@ export default function LandingPage() {
         id="features"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="z-10 grid max-w-4xl gap-6 rounded-2xl border bg-white p-8 text-left shadow-sm md:grid-cols-3">
+        transition={{ duration: 0.5, delay: 0.4 }} className="grid max-w-4xl gap-6 rounded-2xl border bg-white p-8 text-left shadow-sm md:grid-cols-3">
         {[
           {
             title: "Citizen Services",
@@ -98,11 +118,15 @@ export default function LandingPage() {
           <h2 className="text-3xl font-bold">Latest Announcements</h2>
           <p className="text-muted-foreground">Stay updated with the latest news and announcements from your barangay.</p>
         </div>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {announcements.map((announcement, i) => (
-            <AnnouncementCard key={i} announcement={announcement} />
-          ))}
-        </div>
+        {isLoading ? (
+          <p>Loading announcements...</p>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {announcements.map((announcement, i) => (
+              <AnnouncementCard key={i} announcement={announcement} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
