@@ -138,8 +138,8 @@ export default function LandingPage() {
             <p className="text-center">Loading announcements...</p>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {announcements.map((announcement, i) => (
-                <AnnouncementCard key={i} announcement={announcement} />
+              {announcements.map((announcement) => (
+                <AnnouncementCard key={announcement.id} announcement={announcement} />
               ))}
             </div>
           )}
