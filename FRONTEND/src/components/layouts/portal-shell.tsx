@@ -16,7 +16,7 @@ export function PortalShell({ sections, children }: PortalShellProps) {
         <Link href="/" className="mb-6 flex items-center gap-3">
           <div>
             <Image
-              src="/logo.svg"
+              src="/Logo.svg"
               alt="BrgyGo logo"
               width={48}
               height={48}
