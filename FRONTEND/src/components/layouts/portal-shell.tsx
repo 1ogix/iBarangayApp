@@ -12,21 +12,21 @@ interface PortalShellProps {
 export function PortalShell({ sections, children }: PortalShellProps) {
   return (
     <div className="grid min-h-screen grid-cols-[280px_1fr] bg-muted/30">
-      <aside className="flex flex-col border-r bg-background px-6 py-8">
+      <aside className="flex flex-col border-r bg-[#025AAE] px-6 py-8">
         <Link href="/" className="mb-6 flex items-center gap-3">
-          <div className="h-12 w-12 overflow-hidden rounded-full bg-primary">
+          <div>
             <Image
-              src="/logo-mark.svg"
+              src="/logo.svg"
               alt="BrgyGo logo"
               width={48}
               height={48}
               className="h-full w-full object-contain"
             />
           </div>
-          <div>
+          {/* <div>
             <p className="text-lg font-bold">BrgyGo</p>
             <p className="text-xs text-muted-foreground">Barangay services portal</p>
-          </div>
+          </div> */}
         </Link>
         <SidebarNav sections={sections} />
       </aside>

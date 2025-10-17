@@ -21,12 +21,12 @@ export function SidebarNav({ sections }: SidebarNavProps) {
           return (
             <details
               key={section.title}
-              className="rounded-lg border border-border bg-card"
+              // className="rounded-lg border border-border bg-card"
               open={isActive}
             >
               <summary
                 className={cn(
-                  "cursor-pointer list-none px-4 py-2 text-sm font-semibold transition hover:bg-muted",
+                  "cursor-pointer rounded-md list-none px-4 py-2 text-sm text-primary-foreground hover:text-primary font-semibold transition hover:bg-muted",
                   isActive && "bg-muted"
                 )}
               >
@@ -40,7 +40,7 @@ export function SidebarNav({ sections }: SidebarNavProps) {
                       key={item.title}
                       href={item.href ?? "#"}
                       className={cn(
-                        "block rounded-md px-2 py-1.5 transition hover:bg-accent hover:text-accent-foreground",
+                        "block rounded-md px-2 py-1.5 transition text-primary-foreground hover:bg-accent hover:text-accent-foreground",
                         itemActive && "bg-primary text-primary-foreground hover:bg-primary"
                       )}
                     >
@@ -59,8 +59,8 @@ export function SidebarNav({ sections }: SidebarNavProps) {
             key={section.title}
             href={section.href ?? "#"}
             className={cn(
-              "block rounded-lg border border-transparent px-4 py-2 text-sm font-semibold transition hover:bg-accent hover:text-accent-foreground",
-              isActive && "border-primary bg-primary text-primary-foreground hover:bg-primary"
+              "block rounded-lg border border-transparent px-4 py-2 text-sm text-primary-foreground font-semibold transition hover:bg-accent hover:text-accent-foreground",
+              isActive && "border-primary bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
             )}
           >
             {section.title}

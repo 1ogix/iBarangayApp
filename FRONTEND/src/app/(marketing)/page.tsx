@@ -56,12 +56,15 @@ export default function LandingPage() {
     // Use a main tag to wrap all sections for better semantics
     <main className="flex flex-col">
       {/* SECTION 1: Hero */}
-      <section className="flex flex-col items-center gap-8 bg-slate-50 px-6 py-24 text-center">
+      <section className="relative flex h-[calc(100vh-80px)] flex-col justify-center gap-8 bg-cover bg-center px-5 py-20 text-white md:px-20 md:py-24" style={{ backgroundImage: "url('/Hero.webp')" }}>
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/50" />
+        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="z-10 max-w-2xl space-y-4">
+          className="z-10 max-w-[100%] space-y-4">
           <span className="rounded-full bg-blue-100 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-600">
             BrgyGo
           </span>
@@ -69,18 +72,18 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl font-bold text-slate-900 sm:text-5xl md:text-6xl">
-            Digitize services for a smarter barangay community.
+            className="text-4xl font-heading font-black italic sm:text-5xl md:text-6xl">
+            BrgyGo : Your Digital Gateway to Barangay Services
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg text-slate-600">
+            className="text-lg text-slate-200">
             Manage citizen requests, appointments, announcements, and operations in one secure platform. Empower staff with the right tools while giving residents a delightful digital experience.
           </motion.p>
         </motion.div>
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
@@ -91,7 +94,7 @@ export default function LandingPage() {
           <Button asChild size="lg" variant="outline">
             <Link href="#features">Explore Features</Link>
           </Button>
-        </motion.div>
+        </motion.div> */}
       </section>
 
       {/* SECTION 2: Features */}
