@@ -21,6 +21,7 @@ export default function Page() {
   const [announcements, setAnnouncements] = useState<SupabaseAnnouncement[]>([]);
   const [editingAnnouncement, setEditingAnnouncement] = useState<SupabaseAnnouncement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Function to format date from Supabase
   const formatSupabaseDate = (dateString: string) => {
@@ -56,36 +57,87 @@ export default function Page() {
     fetchAnnouncements();
   }, [fetchAnnouncements]);
 
-  const handleSave = async (announcement: Omit<SupabaseAnnouncement, 'date' | 'id'> | SupabaseAnnouncement) => {
-    // Editing an existing announcement
-    if ('id' in announcement && announcement.id) {
-      const { data, error } = await supabase
-        .from('announcements')
-        .update({ title: announcement.title, content: announcement.content, image_url: announcement.imageUrl })
-        .eq('id', announcement.id)
-        .select();
+  const handleSave = async (formData: Omit<SupabaseAnnouncement, 'date' | 'id'> & { file?: File }) => {
+    // --- Debugging: Check current user's role ---
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
 
-      if (error) {
-        console.error("Error updating announcement:", error);
-      } else if (data) {
-        // Refresh the list to show the updated item
-        await fetchAnnouncements();
+      if (profileError) {
+        console.error("Debug: Error fetching user role:", profileError.message);
+      } else {
+        console.log("Debug: Current user role is:", profile?.role);
       }
-      setEditingAnnouncement(null);
     } else {
-      // Creating a new announcement
-      const { data, error } = await supabase
-        .from('announcements')
-        .insert([{ title: announcement.title, content: announcement.content, image_url: announcement.imageUrl }])
-        .select();
+      console.log("Debug: No user is currently logged in.");
+    }
+    // --- End Debugging ---
 
-      if (error) {
-        console.error("Error creating announcement:", error);
-      } else if (data) {
-        // Refresh the list to show the new item at the top
-        await fetchAnnouncements();
+    setIsSaving(true);
+    try {
+      // If the imageUrl is a blob, it's a preview, so we treat it as empty.
+      let imageUrl = (formData.imageUrl && !formData.imageUrl.startsWith('blob:')) ? formData.imageUrl : '';
+
+
+      // 1. Check if a new file was uploaded
+      if (formData.file) {
+        const file = formData.file;
+        const fileName = `${Date.now()}-${file.name}`;
+        const bucket = 'announcement-images';
+
+        // 2. Upload the new file to Supabase Storage
+        const { error: uploadError } = await supabase.storage
+          .from(bucket)
+          .upload(fileName, file);
+
+        if (uploadError) {
+          console.error('Error uploading image:', uploadError);
+          // Optionally, show an error to the user
+          return;
+        }
+
+        // 3. Get the public URL of the uploaded file
+        const { data: urlData } = supabase.storage
+          .from(bucket)
+          .getPublicUrl(fileName);
+
+        imageUrl = urlData.publicUrl;
       }
-      setIsAdding(false);
+
+      const announcementData = {
+        title: formData.title,
+        content: formData.content,
+        image_url: imageUrl,
+      };
+
+      // 4. Save the announcement (create or update) with the correct image URL
+      if ('id' in formData && formData.id) {
+        // Update existing announcement
+        const { error } = await supabase
+          .from('announcements')
+          .update(announcementData)
+          .eq('id', formData.id);
+
+        if (error) console.error("Error updating announcement:", error);
+        setEditingAnnouncement(null);
+      } else {
+        // Create new announcement
+        const { error } = await supabase
+          .from('announcements')
+          .insert([announcementData]);
+
+        if (error) console.error("Error creating announcement:", error);
+        setIsAdding(false);
+      }
+
+      // 5. Refresh the list to show the changes
+      await fetchAnnouncements();
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -119,6 +171,7 @@ export default function Page() {
         <AnnouncementForm 
           onSave={handleSave} 
           onCancel={() => setIsAdding(false)} 
+          isSaving={isSaving}
         />
       )}
 
@@ -145,6 +198,7 @@ export default function Page() {
               onSave={handleSave} 
               onCancel={() => setEditingAnnouncement(null)} 
               isEditing={true} 
+              isSaving={isSaving}
             />
           </DialogContent>
         </Dialog>
