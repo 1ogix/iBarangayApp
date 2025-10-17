@@ -1,16 +1,20 @@
 "use client";
 
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/client";
+// import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "@/components/layouts/page-header";
 
 export default function Page() {
+  const router = useRouter();
   const signOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    redirect("/login");
+    // redirect("/login");
+    router.push("/login");
   };
 
   return (
