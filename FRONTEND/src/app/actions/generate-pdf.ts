@@ -13,7 +13,7 @@ interface ClearanceData {
   lastName: string;
   age: string;
   address: string;
-  barangay: string;
+  // barangay: string;
   municipality: string;
   province: string;
   city: string;
@@ -25,12 +25,24 @@ interface ClearanceData {
   // ... add other fields like ctcNo etc.
 }
 
+// Helper function to convert a stream to a buffer on the server
+async function streamToBuffer(stream: NodeJS.ReadableStream): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    stream.on("data", (chunk) => chunks.push(chunk));
+    stream.on("end", () => resolve(Buffer.concat(chunks)));
+    stream.on("error", reject);
+  });
+}
+
 export async function generateBarangayClearancePdf(
   data: ClearanceData
-): Promise<ReadableStream<Uint8Array> | null> {
+): Promise<{
+  base64?: string;
+  error?: string;
+}> {
   try {
     // 1. Generate QR Code from the reference number
-    // We generate a Data URL which can be directly used as an image source in @react-pdf/renderer
     const qrCodeUrl = await qrcode.toDataURL(data.refNo, {
       errorCorrectionLevel: "H", // High error correction
       margin: 2,
@@ -40,22 +52,28 @@ export async function generateBarangayClearancePdf(
     // 2. Prepare props for the document component
     const docProps = {
       ...data,
-      // Use the dateIssued from the data. The client should format this.
-      // If you need to format it here, ensure the input is a consistent format (e.g., ISO string).
       dateIssued: data.dateIssued,
       qrCodeUrl: qrCodeUrl,
     };
 
     // 3. Render the React component to a stream
     const stream = await renderToStream(
-      React.createElement(BarangayClearanceDoc, docProps)
+      React.createElement(
+        BarangayClearanceDoc as React.ComponentType<any>,
+        docProps
+      )
     );
 
-    // The stream from @react-pdf/renderer is a NodeJS.ReadableStream.
-    // Next.js Server Actions can return web ReadableStreams. The framework handles the conversion.
-    return stream as ReadableStream<Uint8Array>;
+    // 4. Convert the stream to a buffer on the server
+    const buffer = await streamToBuffer(stream);
+
+    // 5. Convert the buffer to a Base64 string and return it
+    return { base64: buffer.toString("base64") };
   } catch (error) {
     console.error("Error generating PDF:", error);
-    return null; // Handle error appropriately
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+    return { error: "An unknown error occurred." };
   }
 }

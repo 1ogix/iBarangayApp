@@ -1,7 +1,5 @@
 // src/components/pdf/barangay-clearance-doc.tsx
-"use client"; // Required if you might render this on the client for preview, but generation will be server-side
-
-// import React from "react";
+import path from "path";
 import React from "react";
 
 import {
@@ -10,37 +8,23 @@ import {
   View,
   Document,
   StyleSheet,
-  Image as PdfImage,
   Font,
+  Image,
 } from "@react-pdf/renderer";
 
-// Register custom fonts. This is crucial for bold/italic styles to work.
-// We are using Poppins as the main font.
+// Construct absolute paths to assets
+const publicDir = path.join(process.cwd(), "public");
+const fontDir = path.join(publicDir, "fonts");
+
+// Register custom fonts from local files to ensure they work on the server.
 Font.register({
   family: "Poppins",
   fonts: [
     {
-      src: "https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecg.ttf",
+      src: path.join(fontDir, "Poppins-Regular.otf"),
     },
     {
-      src: "https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCz7Z1xlFQ.ttf",
-      fontWeight: "bold",
-    },
-  ],
-});
-
-// We can also register other fonts like Inter if needed for other sections.
-Font.register({
-  family: "Inter",
-  fonts: [
-    {
-      src: "https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.ttf",
-    },
-    {
-      src: "https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.ttf",
-      // Note: The regular and bold URLs for Inter can be the same for some CDNs;
-      // @react-pdf/renderer will handle the weighting if the font file supports it.
-      // For simplicity and reliability, we can point both to the main file.
+      src: path.join(fontDir, "Poppins-Bold.otf"),
       fontWeight: "bold",
     },
   ],
@@ -118,12 +102,14 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end", // Position QR code
   },
   watermark: {
+    zIndex: -1,
     position: "absolute",
-    top: "40%",
-    left: "25%",
-    opacity: 0.1, // Make it faint
-    fontSize: 60,
-    transform: "rotate(-45deg)", // Rotate the watermark
+    top: "35%",
+    left: "10%",
+    width: "80%",
+    height: "30%",
+    opacity: 0.1,
+    // transform: "rotate(-30deg)",
   },
 });
 
@@ -157,7 +143,7 @@ export const BarangayClearanceDoc = ({
   lastName,
   age,
   address,
-  barangay,
+  barangay = "Brgy Busay",
   municipality,
   province,
   city,
@@ -167,10 +153,8 @@ export const BarangayClearanceDoc = ({
   ctcNo = "__________",
   issuedAt = "__________",
   issuedOn = "__________",
-  // Using static, publicly available URLs as placeholders.
-  cityLogoUrl = "https://upload.wikimedia.org/wikipedia/en/e/e0/Tarlac_City_Seal.png",
-  // Use a direct PNG link. SVGs are not reliably supported by @react-pdf/renderer.
-  philSealUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Seal_of_the_Philippines.svg/1024px-Seal_of_the_Philippines.svg.png",
+  cityLogoUrl = "public/images/cebu-icon.png",
+  philSealUrl = "public/images/phil_seal.png",
   signatureUrl, // TODO: Pass this from form submission/database
   qrCodeUrl, // TODO: Generate this and pass it
   refNo = "#############",
@@ -180,22 +164,28 @@ export const BarangayClearanceDoc = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Watermark */}
-        <Text style={styles.watermark}>BrgyGo</Text>
+        {/* Watermark: Apply the watermark style to the Image component */}
+        <Image
+          style={styles.watermark}
+          src={"public/images/watermark-logo.png"}
+          fixed
+        />
         {/* Header */}
         <View style={styles.headerLogos}>
-          {cityLogoUrl && <PdfImage style={styles.logo} src={cityLogoUrl} />}
+          {/* {cityLogoUrl && <Image style={styles.logo} src={cityLogoUrl} />} */}
+          <Image style={styles.logo} src={cityLogoUrl} fixed />
           <View style={styles.headerText}>
             <Text>Republic of the Philippines</Text>
             <Text>Province of {province}</Text>
             <Text>Municipality of {municipality}</Text>
             <Text>Barangay {barangay}</Text>
           </View>
-          {philSealUrl && <PdfImage style={styles.logo} src={philSealUrl} />}
+          {/* {philSealUrl && <Image style={styles.logo} src={philSealUrl} />} */}
+          <Image style={styles.logo} src={philSealUrl} fixed />
         </View>
         <View style={styles.header} fixed /> {/* Horizontal Line */}
         {/* Title */}
-        <Text style={styles.title}>Barangay Clearance</Text>
+        <Text style={styles.title}>Barangay Clearancee</Text>
         {/* Body */}
         <Text style={styles.body}>To Whom It May Concern:</Text>
         <Text style={styles.body}>
@@ -221,7 +211,7 @@ export const BarangayClearanceDoc = ({
         <View style={styles.signatureSection}>
           <View style={styles.signatureBlock}>
             {signatureUrl && (
-              <PdfImage
+              <Image
                 src={signatureUrl}
                 style={{
                   position: "absolute",
@@ -263,7 +253,7 @@ export const BarangayClearanceDoc = ({
             <Text>Barangay Secretary</Text>
           </View>
           <View style={{ alignItems: "center" }}>
-            {qrCodeUrl && <PdfImage style={styles.qrCode} src={qrCodeUrl} />}
+            {qrCodeUrl && <Image style={styles.qrCode} src={qrCodeUrl} />}
             <Text style={{ fontSize: 8 }}>REF#: {refNo}</Text>
           </View>
         </View>

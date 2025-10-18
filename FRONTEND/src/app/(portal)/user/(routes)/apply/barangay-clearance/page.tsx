@@ -37,7 +37,7 @@ export default function Page() {
           <h2 className="text-lg font-semibold">Thank You!</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Your request is now pending for admin approval. You can track its
-            status on the "My Requests" page.
+            status on the &quot;My Requests&quot; page.
           </p>
         </div>
       </div>

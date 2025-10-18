@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { generateBarangayClearancePdf } from "@/app/actions/generate-pdf"; // Adjust path
 import { PageHeader } from "@/components/layouts/page-header";
+import { BarangayClearanceDoc } from "@/components/pdf/barangay-clearance-doc";
 
 // This is a mock of what you might fetch from Supabase for an approved request.
 // In a real scenario, you would fetch this data in useEffect or via a server component.
@@ -17,7 +18,7 @@ const mockApprovedRequest = {
   lastName: "Dela Cruz",
   age: "30",
   address: "Block 1, Lot 2, Sector 3",
-  barangay: "Matatalaib", // Fetch dynamically
+  // barangay: "", // Fetch dynamically
   municipality: "Tarlac", // Add this field
   province: "Tarlac", // Add this field
   city: "Tarlac City", // Fetch dynamically
@@ -36,25 +37,29 @@ export default function MyRequestsPage() {
   const handleDownload = async () => {
     setIsDownloading(true);
     try {
-      const stream = await generateBarangayClearancePdf(mockApprovedRequest);
+      const response = await generateBarangayClearancePdf(mockApprovedRequest);
 
-      if (!stream) {
-        alert("Failed to generate PDF.");
-        //console log why !stream is true
+      if (response.error) {
+        alert(`Failed to generate PDF: ${response.error}`);
         return;
       }
 
-      // Convert stream to Blob
-      const reader = stream.getReader();
-      const chunks: Uint8Array[] = [];
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        if (value) {
-          chunks.push(value);
-        }
+      if (!response.base64) {
+        alert("Failed to generate PDF: No data received.");
+        return;
       }
-      const blob = new Blob(chunks, { type: "application/pdf" });
+
+      // Decode the Base64 string to binary data
+      const binaryString = atob(response.base64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // Create a Blob from the binary data
+      const blob = new Blob([bytes], { type: "application/pdf" });
+
       const url = URL.createObjectURL(blob);
 
       // Trigger download
