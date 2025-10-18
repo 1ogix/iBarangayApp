@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { signup } from "./actions";
 
 export default function SignupPage({ searchParams }: { searchParams: { message: string } }) {
@@ -27,36 +28,33 @@ export default function SignupPage({ searchParams }: { searchParams: { message: 
             <label className="text-sm font-medium" htmlFor="full_name">
               Full Name
             </label>
-            <input
+            <Input
               id="full_name"
               name="full_name"
               type="text"
               placeholder="Your full name"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
           <div className="space-y-2 text-left">
             <label className="text-sm font-medium" htmlFor="email">
               Email
             </label>
-            <input
+            <Input
               id="email"
               name="email"
               type="email"
               placeholder="you@example.com"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
           <div className="space-y-2 text-left">
             <label className="text-sm font-medium" htmlFor="password">
               Password
             </label>
-            <input
+            <Input
               id="password"
               name="password"
               type="password"
               placeholder="••••••••"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
           <Button className="w-full" type="submit">

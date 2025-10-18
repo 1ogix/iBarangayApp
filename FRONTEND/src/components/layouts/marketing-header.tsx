@@ -1,7 +1,13 @@
+
 // src/components/layouts/marketing-header.tsx
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import React from "react";
+
+const testAlert = () => {
+  alert("Test Alert!");
+}
 
 export function MarketingHeader() {
   return (
@@ -25,12 +31,14 @@ export function MarketingHeader() {
             Visit Us
           </Link>
         </nav>
-        <Button asChild>
-          <Link href="/login">Login</Link>
-        </Button>
-        <Button asChild>
-            <Link href="/sign-up">Sign Up</Link>
-        </Button>
+        <div className="flex flex-row gap-4">
+          <Button asChild>
+            <Link href="/login">Login</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/signup">Sign Up</Link>
+          </Button>
+        </div>
       </div>
     </header>
   );
