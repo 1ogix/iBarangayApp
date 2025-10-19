@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -26,9 +26,9 @@ export async function signup(formData: FormData) {
     options: {
       data: {
         full_name: fullName,
-        role: role
-      }
-    }
+        role: role,
+      },
+    },
   });
 
   if (error) {
