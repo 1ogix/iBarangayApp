@@ -20,7 +20,9 @@ export async function signup(formData: FormData) {
     role = "admin";
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { error } = await (
+    await supabase
+  ).auth.signUp({
     email,
     password,
     options: {

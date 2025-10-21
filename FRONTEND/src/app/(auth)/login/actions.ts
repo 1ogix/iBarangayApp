@@ -11,11 +11,9 @@ import { createClient } from "@/utils/supabase/server";
 export async function login(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const supabase = createClient();
+  const supabase = await createClient();
 
-  const { data, error } = await (
-    await supabase
-  ).auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -24,7 +22,7 @@ export async function login(formData: FormData) {
     return redirect("/login?message=Could not authenticate user");
   }
 
-  const { data: profile } = await (await supabase)
+  const { data: profile } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", data.user.id)
