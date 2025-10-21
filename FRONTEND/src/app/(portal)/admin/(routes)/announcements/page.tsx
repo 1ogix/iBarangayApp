@@ -7,7 +7,7 @@ import type { Announcement } from "@/components/announcement-card";
 import { AnnouncementForm } from "@/components/announcement-form";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 // import { createClient } from './client';
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 // Define a more specific type for use in this component
 // that includes the properties from the Supabase table.

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 // import { createClient } from "@/utils/supabase/client";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { PageHeader } from "@/components/layouts/page-header";
 import { Loader2 } from "lucide-react";
 
@@ -36,7 +36,9 @@ export default function Page() {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Signing out...
               </>
-            ) : "Yes, sign out"}
+            ) : (
+              "Yes, sign out"
+            )}
           </Button>
         </div>
       </div>

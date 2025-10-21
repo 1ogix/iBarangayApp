@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { generateBarangayClearancePdf } from "@/app/actions/generate-pdf"; // Adjust path
 import { PageHeader } from "@/components/layouts/page-header";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 export default function MyRequestsPage() {
   const [isDownloading, setIsDownloading] = useState(false);

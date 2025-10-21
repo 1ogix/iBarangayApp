@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/layouts/page-header";
 import { DataTable } from "@/components/ui/data-table";
 import { columns, Request } from "@/components/requests-table";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Page() {
   const [requests, setRequests] = useState<Request[]>([]);
@@ -59,7 +59,10 @@ export default function Page() {
         title="Requests Queue"
         description="Monitor documents awaiting review, approval, or release."
       />
-      <DataTable columns={columns(handleApprove, handleReject)} data={requests} />
+      <DataTable
+        columns={columns(handleApprove, handleReject)}
+        data={requests}
+      />
     </div>
   );
 }

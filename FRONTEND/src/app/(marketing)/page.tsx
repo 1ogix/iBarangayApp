@@ -8,7 +8,7 @@ import { AnnouncementCard } from "@/components/announcement-card";
 import type { Announcement } from "@/components/announcement-card";
 import { Newspaper, Briefcase, Database } from "lucide-react";
 import { motion } from "framer-motion";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 // Landing Page Component
 export default function LandingPage() {
