@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans, Poppins as FontHeading } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import AuthProvider from "@/components/auth-provider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -33,7 +34,7 @@ export default function RootLayout({
           fontHeading.variable
         )}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
