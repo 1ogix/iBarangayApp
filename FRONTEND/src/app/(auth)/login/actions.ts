@@ -1,25 +1,30 @@
-'use server';
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+// import { createClient } from "@/utils/supabase/server";
 import { createClient } from "@/utils/supabase/server";
+
+// In a real application, this should be an environment variable.}
 
 export async function login(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const supabase = createClient();
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await (
+    await supabase
+  ).auth.signInWithPassword({
     email,
-    password
+    password,
   });
 
   if (error) {
     return redirect("/login?message=Could not authenticate user");
   }
 
-  const { data: profile } = await supabase
+  const { data: profile } = await (await supabase)
     .from("profiles")
     .select("role")
     .eq("id", data.user.id)

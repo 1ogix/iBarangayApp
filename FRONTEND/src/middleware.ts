@@ -4,22 +4,21 @@ import { createClient } from "@/utils/supabase/middleware";
 export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request);
 
-  // Refresh session if expired - required for Server Components
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
   const { pathname } = request.nextUrl;
 
-  // Protected routes
-  const protectedRoutes = ["/admin/", "/user"];
+  // Define protected routes
+  const protectedRoutes = ["/admin", "/user"];
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
 
   if (isProtectedRoute && !session) {
-    // Redirect to login page if not authenticated
+    // Redirect to login page if not authenticated and trying to access a protected route
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("message", "Please log in to access this page.");
@@ -37,6 +36,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$)).*",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
