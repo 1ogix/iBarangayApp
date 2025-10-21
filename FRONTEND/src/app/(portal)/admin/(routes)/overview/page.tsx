@@ -1,6 +1,12 @@
 import { PageHeader } from "@/components/layouts/page-header";
+import { createClient } from "@/utils/supabase/server";
 
-export default function Page() {
+export default async function Page() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  console.log(user?.role);
+
   return (
     <div className="space-y-6">
       <PageHeader title="Admin Overview" description="High-level metrics and operational snapshot for staff." />
