@@ -89,9 +89,9 @@ export default function LandingPage() {
     // Use a main tag to wrap all sections for better semantics
     <main className="flex flex-col">
       {/* SECTION 1: Hero */}
-      <section className="relative flex h-screen flex-col justify-center gap-8 bg-[url('/Hero.webp')] bg-cover bg-center px-5 py-20 text-white md:px-20 md:py-24">
+      <section className="relative flex h-screen flex-col justify-center gap-8 bg-[url('/cebu_city_hall.jpg')] bg-cover bg-center px-5 py-20 text-white md:px-20 md:py-24">
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0" />
+        <div className="absolute inset-0 bg-[#1976D2] opacity-60 shadow-[0px_4px_8px_0px_rgba(25,118,210,0.20)]"></div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -114,11 +114,9 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg text-slate-200"
+            className="text-lg font-medium italic text-[#131E3A] font-sans tracking-wide leading-relaxed drop-shadow-md"
           >
-            Manage citizen requests, appointments, announcements, and operations
-            in one secure platform. Empower staff with the right tools while
-            giving residents a delightful digital experience.
+            Bringing government services closer to the people of our community.
           </motion.p>
         </motion.div>
         <motion.div
