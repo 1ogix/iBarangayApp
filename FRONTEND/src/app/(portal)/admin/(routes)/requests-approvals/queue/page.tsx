@@ -14,8 +14,8 @@ export default function Page() {
     const { data, error } = await supabase.from("requests").select("*");
     if (error) {
       console.error("Error fetching requests:", error);
-    } else {
-      const formattedRequests = data.map((req) => ({
+    } else if (data) {
+      const formattedRequests = data.map((req: any) => ({
         id: req.id,
         name: `${req.firstName} ${req.lastName}`,
         type: req.type,
