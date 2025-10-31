@@ -1,61 +1,78 @@
+"use client";
 
-// src/components/layouts/marketing-header.tsx
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import React from "react";
-
-const testAlert = () => {
-  alert("Test Alert!");
-}
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 export function MarketingHeader() {
+  const [active, setActive] = useState("/"); // Track which menu is active
+
+  const menuItems = [
+    { name: "Home", href: "/" },
+    { name: "Services", href: "#services" },
+    { name: "Announcements", href: "#announcements" },
+    { name: "About Us", href: "#about" },
+    { name: "Visit Us", href: "#contact" },
+  ];
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#131E3A] shadow-[0_4px_8px_rgba(25,118,210,0.20)] transition-all duration-300">
       <div className="w-full flex h-20 items-center px-8">
         {/* === Left Section: Logo + Navigation === */}
         <div className="flex items-center gap-12">
           <Link href="/" className="flex items-center gap-3">
-            <Image src="/Logo.svg" alt="BrgyGo Logo" width={139} height={40} />
+            <Image src="/Logo.svg" alt="BrgyGo Logo" width={135} height={38} />
           </Link>
 
-          {/* Navigation Menu */}
-          <nav className="hidden md:flex items-center gap-24 text-lg text-white font-medium">
-            <Link href="/" className="hover:text-blue-400 transition-colors duration-200">
-              Home
-            </Link>
-            <Link href="#services" className="hover:text-blue-400 transition-colors duration-200">
-              Services
-            </Link>
-            <Link href="#announcements" className="hover:text-blue-400 transition-colors duration-200">
-              Announcements
-            </Link>
-            <Link href="#about" className="hover:text-blue-400 transition-colors duration-200">
-              About Us
-            </Link>
-            <Link href="#contact" className="hover:text-blue-400 transition-colors duration-200">
-              Visit Us
-            </Link>
+          {/* Navigation Menu with Animated Underline */}
+          <nav className="hidden md:flex items-center gap-12 text-lg text-white font-medium relative">
+            {menuItems.map((item) => (
+              <div
+                key={item.name}
+                className="relative cursor-pointer"
+                onClick={() => setActive(item.href)}
+              >
+                <Link
+                  href={item.href}
+                  className={`transition-colors duration-300 ${
+                    active === item.href
+                      ? "text-white"
+                      : "text-white"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+
+                {/* Underline animation */}
+                {active === item.href && (
+                  <motion.div
+                    layoutId="underline"
+                    className="absolute left-0 right-0 -bottom-1 h-[2px] bg-white rounded-full"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+              </div>
+            ))}
           </nav>
         </div>
 
         {/* === Right Section: Buttons === */}
-        <div className="flex flex-row gap-8 ml-auto">
-          {/* Login Button — Solid Blue */}
+        <div className="flex flex-row gap-4 ml-auto">
           <Button
             asChild
             size="lg"
-            className="bg-[#1976D2] text-white font-semibold px-6 py-2 rounded-lg shadow-md transition-all duration-300 hover:bg-white hover:text-[#1976D2]"
+            className="bg-[#131E3A] text-white font-semibold px-4 py-2 rounded-lg shadow-md transition-all duration-300 hover:bg-white hover:text-[#1976D2] border border-white"
           >
             <Link href="/login">Login</Link>
           </Button>
 
-          {/* Sign Up Button — Outline Style */}
           <Button
             asChild
             size="lg"
             variant="outline"
-            className="border-2 border-[#1976D2] text-[#1976D2] hover:bg-[#1976D2] hover:text-white font-semibold px-6 py-2 rounded-lg transition-all duration-300"
+            className="bg-[#006CA5] text-white font-semibold px-4 py-2 rounded-lg shadow-md transition-all duration-300 hover:bg-white hover:text-[#006CA5] border border-[#006CA5]"
           >
             <Link href="/signup">Sign Up</Link>
           </Button>

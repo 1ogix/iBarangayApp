@@ -108,13 +108,15 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl max-w-7xl font-heading font-black italic sm:text-5xl md:text-7xl"
           >
-            BrgyGo : Your Digital Gateway to Barangay Services
+            Brgy
+            <span className="text-[#00FFFF]">Go</span>
+            : Your Digital Gateway to Barangay Services
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg font-medium italic text-[#131E3A] font-sans tracking-wide leading-relaxed drop-shadow-md"
+            className="text-lg font-thin text-white font-sans tracking-wide leading-relaxed drop-shadow-md"
           >
             Bringing government services closer to the people of our community.
           </motion.p>
@@ -125,11 +127,19 @@ export default function LandingPage() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="relative flex flex-row gap-4"
         >
-          <Button asChild size="lg">
+          <Button
+            asChild
+            className="bg-[#131E3A] text-white text-lg font-semibold px-6 py-2 rounded-xl shadow-lg transition-all duration-300 hover:bg-white hover:text-[#131E3A] border-2 border-[#131E3A]"
+          >
             <Link href="/signup">Get Started</Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link href="#features">Explore Features</Link>
+
+          
+          <Button
+              asChild
+              className="bg-[#1976D2]/10 text-white text-lg font-semibold px-6 py-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white hover:text-[#131E3A] border-2 border-white"
+            >
+              <Link href="#features">Explore Features</Link>
           </Button>
         </motion.div>
       </section>
