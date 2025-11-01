@@ -13,7 +13,8 @@ import { createClient } from "@/utils/supabase/client";
 // Landing Page Component
 export default function LandingPage() {
   const supabase = createClient();
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [localNews, setLocalNews] = useState<Announcement[]>([]);
+  const [barangayAnnouncements, setBarangayAnnouncements] = useState<Announcement[]>([]); 
   const [isLoading, setIsLoading] = useState(true);
 
   // Helper to format date strings from Supabase
@@ -30,21 +31,24 @@ export default function LandingPage() {
     const { data, error } = await supabase
       .from("announcements")
       .select("*")
-      .order("created_at", { ascending: false })
-      .limit(3);
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching announcements for landing page:", error);
+      console.error("Error fetching announcements:", error);
     } else if (data) {
       const formattedData = data.map((item) => ({
         ...item,
         imageUrl: item.image_url ?? "",
         date: formatSupabaseDate(item.created_at),
       }));
-      setAnnouncements(formattedData);
+
+      // Split into Local News and Barangay Announcements
+      setLocalNews(formattedData.filter((item) => item.category === "news"));
+      setBarangayAnnouncements(formattedData.filter((item) => item.category === "announcement"));
     }
     setIsLoading(false);
   }, [supabase]);
+
   // Fetch announcements on component mount
   // and when fetchAnnouncements changes
   // (which is stable due to useCallback)
@@ -109,7 +113,7 @@ export default function LandingPage() {
             className="text-4xl max-w-7xl font-heading font-black italic sm:text-5xl md:text-7xl"
           >
             Brgy
-            <span className="text-[#00FFFF]">Go</span>
+            <span className="text-[#89CFF0]">Go</span>
             : Your Digital Gateway to Barangay Services
           </motion.h1>
           <motion.p
@@ -226,33 +230,107 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* SECTION 3: Announcements */}
+        {/* SECTION 3: Announcements */}
       <section
         id="announcements"
         className="flex justify-center bg-slate-50 px-6 py-16"
       >
-        <div className="w-full max-w-4xl space-y-8">
+        <div className="w-full max-w-5xl space-y-12">
           <div className="text-center">
-            <h2 className="text-3xl font-bold">Latest Announcements</h2>
+            <h2 className="text-4xl font-bold text-[#131E3A]">Announcements</h2>
             <p className="text-muted-foreground">
-              Stay updated with the latest news and announcements from your
-              barangay.
+              Stay informed with the latest barangay updates and local happenings.
             </p>
           </div>
-          {isLoading ? (
-            <p className="text-center">Loading announcements...</p>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {announcements.map((announcement) => (
-                <AnnouncementCard
-                  key={announcement.id}
-                  announcement={announcement}
-                />
-              ))}
+
+          {/* LOCAL NEWS SECTION */}
+          <section
+            id="local-news"
+            className="flex justify-center bg-[#f8f9fb] px-6 py-16"
+          >
+            <div className="w-full max-w-6xl">
+              <div className="bg-white rounded-3xl shadow-md p-10">
+                {/* Section Header */}
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-3xl font-bold text-[#1976D2] flex items-center gap-2">
+                    <Newspaper className="w-7 h-7 text-[#1976D2]" />
+                    Local News
+                  </h2>
+                  <Button
+                    asChild
+                    className="bg-[#1976D2] text-white px-5 py-2 rounded-lg shadow-md hover:bg-[#1565C0] transition-all duration-300"
+                  >
+                    <Link href="/local-news">Read More →</Link>
+                  </Button>
+                </div>
+
+                {/* News Cards */}
+                {isLoading ? (
+                  <p className="text-center text-gray-500">Loading local news...</p>
+                ) : localNews.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {localNews.slice(0, 4).map((news) => (
+                      <div
+                        key={news.id}
+                        className="flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-300"
+                      >
+                        {news.imageUrl && (
+                          <div className="relative h-40 w-full">
+                            <Image
+                              src={news.imageUrl}
+                              alt={news.title}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+
+                        <div className="p-4 flex flex-col flex-grow">
+                          <h3 className="text-base font-semibold mb-1 text-[#131E3A] line-clamp-2">
+                            {news.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 flex-grow line-clamp-3">
+                            {news.content}
+                          </p>
+                          <Link
+                            href={`/local-news/${news.id}`}
+                            className="text-[#1976D2] text-sm font-semibold mt-3 hover:underline"
+                          >
+                            Read More →
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-gray-500">No local news available.</p>
+                )}
+              </div>
             </div>
-          )}
+          </section>
+
+
+
+          {/* BARANGAY ANNOUNCEMENTS */}
+          <div>
+            <h3 className="text-2xl font-semibold mb-4 text-[#1976D2] flex items-center gap-2">
+              <Briefcase className="w-6 h-6 text-[#1976D2]" /> Barangay Announcements
+            </h3>
+            {isLoading ? (
+              <p className="text-center">Loading announcements...</p>
+            ) : barangayAnnouncements.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {barangayAnnouncements.map((a) => (
+                  <AnnouncementCard key={a.id} announcement={a} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-500">No announcements available.</p>
+            )}
+          </div>
         </div>
       </section>
+
     </main>
   );
 }
