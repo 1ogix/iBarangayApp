@@ -15,7 +15,7 @@ export function MarketingHeader() {
     { name: "Services", href: "#services" },
     { name: "Announcements", href: "#announcements" },
     { name: "About Us", href: "#about" },
-    { name: "Visit Us", href: "#contact" },
+    { name: "Visit Us", href: "#visit-us" },
   ];
 
   return (
