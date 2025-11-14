@@ -127,7 +127,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative flex flex-row gap-4"
+          className="relative z-10 flex flex-row gap-4"
         >
         
         {/* === Get Started Button === */}
