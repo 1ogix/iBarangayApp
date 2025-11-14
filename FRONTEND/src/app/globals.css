@@ -26,8 +26,14 @@
     --radius: 0.75rem;
   }
 
-  @layer base{
-    h1, h2, h3, h4, h5, h6, .heading {
+  @layer base {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .heading {
       @apply font-heading;
     }
   }
