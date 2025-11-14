@@ -45,6 +45,7 @@ export default function LandingPage() {
     }
     setIsLoading(false);
   }, [supabase]);
+
   // Fetch announcements on component mount
   // and when fetchAnnouncements changes
   // (which is stable due to useCallback)
@@ -89,9 +90,10 @@ export default function LandingPage() {
     // Use a main tag to wrap all sections for better semantics
     <main className="flex flex-col">
       {/* SECTION 1: Hero */}
-      <section className="relative flex h-screen flex-col justify-center gap-8 bg-[url('/Hero.webp')] bg-cover bg-center px-5 py-20 text-white md:px-20 md:py-24">
-        {/* Overlay for better text readability */}
-        <div className="absolute inset-0" />
+      <section className="relative flex h-screen flex-col justify-center gap-8 bg-[url('/cebu_city_hall.jpg')] bg-cover bg-center px-5 py-20 pt-20 text-white md:px-20 md:py-24">
+       
+       {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-[#1976D2] opacity-60 shadow-[0px_4px_8px_0px_rgba(25,118,210,0.20)]"></div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -108,48 +110,62 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl max-w-7xl font-heading font-black italic sm:text-5xl md:text-7xl"
           >
-            BrgyGo : Your Digital Gateway to Barangay Services
+            Brgy
+            <span className="text-[#00FFFF]">Go</span>
+            : Your Digital Gateway to Barangay Services
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg text-slate-200"
+            className="text-lg font-thin text-white font-sans tracking-wide leading-relaxed drop-shadow-md"
           >
-            Manage citizen requests, appointments, announcements, and operations
-            in one secure platform. Empower staff with the right tools while
-            giving residents a delightful digital experience.
+            Bringing government services closer to the people of our community.
           </motion.p>
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative flex flex-row gap-4"
+          className="relative z-10 flex flex-row gap-4"
         >
-          <Button asChild size="lg">
+        
+        {/* === Get Started Button === */}
+          <Button
+            asChild
+            className="bg-[#131E3A] text-white text-lg font-semibold px-4 py-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white hover:text-[#131E3A] border-2 border-[#131E3A]"
+          >
             <Link href="/signup">Get Started</Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
+
+        
+        {/* === Explore Features Button === */}
+          <Button
+            asChild
+            className="bg-[#1976D2]/10 text-white border-2 border-white text-lg font-semibold px-4 py-4 rounded-xl shadow-md transition-all duration-300 hover:bg-white hover:text-[#131E3A]"
+          >
             <Link href="#features">Explore Features</Link>
           </Button>
         </motion.div>
       </section>
-      {/* SECTION 2: Services */}
+    
+     {/* SECTION 2: Services */}
       <section
         id="services"
         className="flex flex-col justify-center items-center bg-slate-50 px-6 py-16"
       >
         <div className="w-full max-w-4xl space-y-8">
           <div className="text-center">
-            <h2 className="text-6xl font-sans font-bold">GOVERMENT SERVICES</h2>
+            <h2 className="text-5xl font-bold text-[#131E3A]">Government Services</h2>
             <p className="text-muted-foreground">
               Discover the comprehensive services BrgyGo offers to streamline
               barangay operations and enhance citizen engagement.
             </p>
           </div>
         </div>
-        {/* Government services cards from static data */}
+
+
+       {/* Government services cards from static data */}
         <div className="grid mt-6 w-full max-w-4xl grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-2">
           {governmentServices.map((service) => (
             <div
@@ -176,7 +192,9 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
-      {/* SECTION 2: Features */}
+
+
+     {/* SECTION 2: Features */}
       <section
         id="features"
         className="flex justify-center bg-white px-6 py-16"
@@ -218,14 +236,15 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* SECTION 3: Announcements */}
+
+     {/* SECTION 3: Announcements */}
       <section
         id="announcements"
         className="flex justify-center bg-slate-50 px-6 py-16"
       >
         <div className="w-full max-w-4xl space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold">Latest Announcements</h2>
+            <h2 className="text-5xl font-bold text-[#131E3A]">Latest Announcements</h2>
             <p className="text-muted-foreground">
               Stay updated with the latest news and announcements from your
               barangay.
@@ -245,6 +264,70 @@ export default function LandingPage() {
           )}
         </div>
       </section>
+
+
+     {/* SECTION 4: About Us */}
+      <section
+        id="about"
+        className="flex flex-col items-center bg-white px-6 py-16 text-center"
+      >
+        <div className="w-full max-w-5xl space-y-8">
+          <h2 className="text-5xl font-bold text-[#131E3A]">About Us</h2>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mt-8">
+            {/* Image */}
+            <div className="w-72 h-72 relative">
+              <Image
+                src="/cebu seal.png"
+                alt="Cebu City Seal"
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            {/* Text */}
+            <div className="max-w-2xl text-gray-700 leading-relaxed text-justify">
+              <p>
+                The Cebu City Hall stands as a proud symbol of governance and heritage
+                in the heart of Cebu. Established in the early 20th century, it has
+                served as the center of local administration, providing public
+                services and preserving Cebu’s rich history. Today, through digital
+                initiatives like <span className="font-semibold text-[#1976D2]">BrgyGo</span>, the city continues to bridge modern
+                technology with civic engagement, empowering citizens and fostering
+                transparency.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+
+     {/* SECTION 5: Visit Us */}
+      <section
+        id="visit-us"
+        className="flex flex-col justify-center items-center bg-white px-6 py-20"
+      >
+        <div className="w-full max-w-4xl space-y-8 text-center">
+          <h2 className="text-5xl font-bold text-[#131E3A]">Visit Us</h2>
+          <p className="text-muted-foreground">
+            Come and visit us at Cebu City Hall — your local Barangay Office is ready to assist you.
+          </p>
+
+          <div className="mt-8 flex justify-center">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62712.40274251852!2d123.8316483!3d10.3156995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a9993bb6d4a58f%3A0x9cf7c84a76b6d46f!2sCebu%20City%20Hall!5e0!3m2!1sen!2sph!4v1708300000000!5m2!1sen!2sph"
+              width="100%"
+              height="450"
+              allowFullScreen
+              loading="lazy"
+              className="rounded-2xl shadow-lg border border-gray-200"
+              title="Cebu City Hall Location"
+            ></iframe>
+          </div>
+        </div> 
+      </section>
+
     </main>
   );
 }
