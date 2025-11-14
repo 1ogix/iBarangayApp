@@ -5,11 +5,26 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export function MarketingHeader() {
-  const [active, setActive] = useState("/");
+  const [active, setActive] = useState(
+    typeof window !== "undefined" && window.location.hash
+      ? window.location.hash
+      : "/"
+  );
 
+  useEffect(() => {
+    const handleHashChange = () => {
+      setActive(window.location.hash || "/");
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    // Also handle initial load if hash is present
+    handleHashChange();
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
   const menuItems = [
     { name: "Home", href: "/" },
     { name: "Services", href: "#services" },
