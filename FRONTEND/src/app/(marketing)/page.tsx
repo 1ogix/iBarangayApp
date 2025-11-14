@@ -322,6 +322,7 @@ export default function LandingPage() {
               allowFullScreen
               loading="lazy"
               className="rounded-2xl shadow-lg border border-gray-200"
+              title="Cebu City Hall Location"
             ></iframe>
           </div>
         </div> 
