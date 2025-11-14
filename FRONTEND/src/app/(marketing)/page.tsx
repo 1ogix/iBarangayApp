@@ -118,7 +118,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg font-thin  text-white font-sans tracking-wide leading-relaxed drop-shadow-md"
+            className="text-lg font-thin text-white font-sans tracking-wide leading-relaxed drop-shadow-md"
           >
             Bringing government services closer to the people of our community.
           </motion.p>
