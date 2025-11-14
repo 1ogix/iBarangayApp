@@ -156,7 +156,7 @@ export default function LandingPage() {
       >
         <div className="w-full max-w-4xl space-y-8">
           <div className="text-center">
-            <h2 className="text-5xl  font-bold text-[#131E3A]">Government Services</h2>
+            <h2 className="text-5xl font-bold text-[#131E3A]">Government Services</h2>
             <p className="text-muted-foreground">
               Discover the comprehensive services BrgyGo offers to streamline
               barangay operations and enhance citizen engagement.
