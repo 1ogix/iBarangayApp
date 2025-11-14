@@ -53,7 +53,7 @@ export function MarketingHeader() {
                 <Link
                   href={item.href}
                   className={`transition-colors duration-300 ${
-                    active === item.href ? "text-white" : "text-white"
+                    active === item.href ? "text-white" : "text-white/70"
                   }`}
                 >
                   {item.name}
