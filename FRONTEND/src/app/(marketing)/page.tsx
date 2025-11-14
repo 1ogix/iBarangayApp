@@ -90,7 +90,7 @@ export default function LandingPage() {
     // Use a main tag to wrap all sections for better semantics
     <main className="flex flex-col">
       {/* SECTION 1: Hero */}
-      <section className="relative flex h-screen flex-col justify-center gap-8 bg-[url('/cebu_city_hall.jpg')] bg-cover bg-center px-5 py-20 text-white md:px-20 md:py-24">
+      <section className="relative flex h-screen flex-col justify-center gap-8 bg-[url('/cebu_city_hall.jpg')] bg-cover bg-center px-5 py-20 pt-20 text-white md:px-20 md:py-24">
        
        {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-[#1976D2] opacity-60 shadow-[0px_4px_8px_0px_rgba(25,118,210,0.20)]"></div>
