@@ -1,0 +1,30 @@
+# Node dependencies
+node_modules/
+FRONTEND/node_modules/
+BACKEND/node_modules/
+
+# Next.js
+FRONTEND/.next/
+FRONTEND/out/
+FRONTEND/.turbo/
+
+# Build artifacts
+dist/
+build/
+
+# Supabase temp
+supabase/.temp/
+BACKEND/supabase/.temp/
+
+# Environment
+*.env
+*.env.local
+
+# OS
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
