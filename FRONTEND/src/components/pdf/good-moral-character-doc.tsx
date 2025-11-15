@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import path from "path";
 import React from "react";
 
@@ -188,7 +189,7 @@ export const GoodMoralCharacterDoc = ({
             {" "}
             Community members including{" "}
             <Text style={styles.bold}>{characterReference}</Text> attest to the
-            applicant's good moral standing.
+            applicant&apos;s good moral standing.
           </Text>
         )}
       </Text>

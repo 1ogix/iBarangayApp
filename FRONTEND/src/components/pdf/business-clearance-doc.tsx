@@ -1,4 +1,5 @@
 // src/components/pdf/barangay-clearance-doc.tsx
+/* eslint-disable jsx-a11y/alt-text */
 import path from "path";
 import React from "react";
 

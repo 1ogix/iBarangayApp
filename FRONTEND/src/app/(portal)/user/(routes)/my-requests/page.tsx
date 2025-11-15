@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   generateBarangayClearancePdf,
@@ -19,28 +19,28 @@ export default function MyRequestsPage() {
   const [requests, setRequests] = useState<any[]>([]);
   const supabase = createClient();
 
-  useEffect(() => {
-    const fetchRequests = async () => {
-      setIsLoading(true);
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const { data, error } = await supabase
-          .from("requests")
-          .select("*")
-          .eq("user_id", user.id);
-        if (error) {
-          console.error("Error fetching requests:", error);
-        } else if (data) {
-          setRequests(data);
-        }
+  const fetchRequests = useCallback(async () => {
+    setIsLoading(true);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data, error } = await supabase
+        .from("requests")
+        .select("*")
+        .eq("user_id", user.id);
+      if (error) {
+        console.error("Error fetching requests:", error);
+      } else if (data) {
+        setRequests(data);
       }
-      setIsLoading(false);
-    };
+    }
+    setIsLoading(false);
+  }, [supabase]);
 
+  useEffect(() => {
     fetchRequests();
-  }, []);
+  }, [fetchRequests]);
 
   const handleDownload = async (request: any) => {
     setIsDownloading(true);

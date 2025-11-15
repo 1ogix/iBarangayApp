@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PageHeader } from "@/components/layouts/page-header";
 import { DataTable } from "@/components/ui/data-table";
 import { columns, Request } from "@/components/requests-table";
@@ -10,11 +10,14 @@ export default function Page() {
   const [requests, setRequests] = useState<Request[]>([]);
   const supabase = createClient();
 
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     const { data, error } = await supabase.from("requests").select("*");
     if (error) {
       console.error("Error fetching requests:", error);
-    } else if (data) {
+      return;
+    }
+
+    if (data) {
       const formattedRequests = data.map((req: any) => ({
         id: req.id,
         name: `${req.firstName} ${req.lastName}`,
@@ -23,11 +26,11 @@ export default function Page() {
       }));
       setRequests(formattedRequests);
     }
-  };
+  }, [supabase]);
 
   useEffect(() => {
     fetchRequests();
-  }, []);
+  }, [fetchRequests]);
 
   const handleApprove = async (id: string) => {
     const { error } = await supabase
