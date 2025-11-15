@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { generateBarangayClearancePdf } from "@/app/actions/generate-pdf"; // Adjust path
+import {
+  generateBarangayClearancePdf,
+  generateBusinessClearancePdf,
+  generateCertificateOfIndigencyPdf,
+  generateCertificateOfResidencyPdf,
+  generateGoodMoralCharacterPdf,
+} from "@/app/actions/generate-pdf";
 import { PageHeader } from "@/components/layouts/page-header";
 import { createClient } from "@/utils/supabase/client";
 
@@ -39,17 +45,69 @@ export default function MyRequestsPage() {
   const handleDownload = async (request: any) => {
     setIsDownloading(true);
     try {
-      const clearanceData = {
-        ...request,
+      const refPrefix =
+        request.type === "Certificate of Indigency"
+          ? "COI"
+          : request.type === "Barangay Business Clearance"
+          ? "BIZ"
+          : request.type === "Certificate of Residency"
+          ? "COR"
+          : request.type === "Certificate of Good Moral Character"
+          ? "COM"
+          : "BC";
+
+      const baseData = {
+        firstName: request.firstName,
+        middleInitial: request.middleInitial,
+        lastName: request.lastName,
+        age: request.age,
+        address: request.address,
         municipality: "Cebu",
         province: "Cebu",
         city: "Cebu City",
+        barangay: request.barangay ?? "Busay",
         dateIssued: new Date().toLocaleDateString(),
         punongBarangay: "ENGR LAURON",
         barangaySecretary: "MAM BUHAWE",
-        refNo: `BC-${new Date().getFullYear()}-${request.id}`,
+        refNo: `${refPrefix}-${new Date().getFullYear()}-${request.id}`,
+        characterReference: request.character_reference,
+        purpose: request.purpose,
       };
-      const response = await generateBarangayClearancePdf(clearanceData);
+
+      let response;
+      let filename = `BarangayClearance-${request.lastName}.pdf`;
+
+      if (request.type === "Barangay Business Clearance") {
+        response = await generateBusinessClearancePdf({
+          ...baseData,
+          businessName: request.business_name ?? request.businessName ?? "N/A",
+        });
+        filename = `BusinessClearance-${
+          request.business_name || request.lastName
+        }.pdf`;
+      } else if (request.type === "Certificate of Indigency") {
+        response = await generateCertificateOfIndigencyPdf({
+          ...baseData,
+          purpose: request.purpose ?? "N/A",
+        });
+        filename = `CertificateOfIndigency-${request.lastName}.pdf`;
+      } else if (request.type === "Certificate of Residency") {
+        response = await generateCertificateOfResidencyPdf({
+          ...baseData,
+          residencyDuration:
+            request.residency_duration ?? request.residencyDuration ?? "N/A",
+        });
+        filename = `CertificateOfResidency-${request.lastName}.pdf`;
+      } else if (request.type === "Certificate of Good Moral Character") {
+        response = await generateGoodMoralCharacterPdf({
+          ...baseData,
+          characterReference:
+            request.character_reference ?? request.characterReference ?? "N/A",
+        });
+        filename = `GoodMoralCharacter-${request.lastName}.pdf`;
+      } else {
+        response = await generateBarangayClearancePdf(baseData);
+      }
 
       if (response.error) {
         alert(`Failed to generate PDF: ${response.error}`);
@@ -77,7 +135,7 @@ export default function MyRequestsPage() {
       // Trigger download
       const a = document.createElement("a");
       a.href = url;
-      a.download = `BarangayClearance-${request.lastName}.pdf`; // Set filename
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

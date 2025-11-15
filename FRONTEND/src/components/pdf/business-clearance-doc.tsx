@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 });
 
 // Define the structure of your document
-interface BarangayClearanceProps {
+interface BusinessClearanceProps {
   businessName: string;
   firstName: string;
   middleInitial: string;
@@ -138,7 +138,7 @@ interface BarangayClearanceProps {
   refNo?: string;
 }
 
-export const BarangayClearanceDoc = ({
+export const BusinessClearanceDoc = ({
   businessName,
   firstName,
   middleInitial,
@@ -160,7 +160,7 @@ export const BarangayClearanceDoc = ({
   signatureUrl, // TODO: Pass this from form submission/database
   qrCodeUrl, // TODO: Generate this and pass it
   refNo = "#############",
-}: BarangayClearanceProps) => {
+}: BusinessClearanceProps) => {
   // Using a standard function body with a return statement can help with TSX type inference issues.
   // The errors you saw are often related to this.
   return (
