@@ -16,6 +16,14 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    outputFileTracingIncludes: {
+      "/app/actions/generate-pdf": [
+        "./public/fonts/Poppins-Regular.otf",
+        "./public/fonts/Poppins-Bold.otf",
+      ],
+    },
+  },
 };
 
 module.exports = nextConfig;
