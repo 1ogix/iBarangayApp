@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/alt-text */
-import path from "path";
 import React from "react";
 
 import {
@@ -12,17 +11,18 @@ import {
   View,
 } from "@react-pdf/renderer";
 
-const publicDir = path.join(process.cwd(), "public");
-const fontDir = path.join(publicDir, "fonts");
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
 Font.register({
   family: "Poppins",
   fonts: [
     {
-      src: path.join(fontDir, "Poppins-Regular.otf"),
+      src: `${baseUrl}/fonts/Poppins-Regular.otf`,
     },
     {
-      src: path.join(fontDir, "Poppins-Bold.otf"),
+      src: `${baseUrl}/fonts/Poppins-Bold.otf`,
       fontWeight: "bold",
     },
   ],

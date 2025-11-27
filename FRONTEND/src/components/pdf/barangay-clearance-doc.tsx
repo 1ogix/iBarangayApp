@@ -1,6 +1,5 @@
 // src/components/pdf/barangay-clearance-doc.tsx
 /* eslint-disable jsx-a11y/alt-text */
-import path from "path";
 import React from "react";
 
 import {
@@ -13,19 +12,19 @@ import {
   Image,
 } from "@react-pdf/renderer";
 
-// Construct absolute paths to assets
-const publicDir = path.join(process.cwd(), "public");
-const fontDir = path.join(publicDir, "fonts");
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
-// Register custom fonts from local files to ensure they work on the server.
+// Register custom fonts from URLs so they are available in serverless environments.
 Font.register({
   family: "Poppins",
   fonts: [
     {
-      src: path.join(fontDir, "Poppins-Regular.otf"),
+      src: `${baseUrl}/fonts/Poppins-Regular.otf`,
     },
     {
-      src: path.join(fontDir, "Poppins-Bold.otf"),
+      src: `${baseUrl}/fonts/Poppins-Bold.otf`,
       fontWeight: "bold",
     },
   ],

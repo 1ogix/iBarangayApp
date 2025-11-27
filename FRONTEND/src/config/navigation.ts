@@ -30,13 +30,7 @@ export const userNavigation: NavSection[] = [
     ],
   },
   { title: "My Requests", href: "/user/my-requests" },
-  {
-    title: "Appointments",
-    items: [
-      { title: "Health Center", href: "/user/appointments/health-center" },
-      { title: "Barangay Office", href: "/user/appointments/barangay-office" },
-    ],
-  },
+  { title: "Appointments", href: "/user/appointments" },
   { title: "Payments & Receipts", href: "/user/payments-receipts" },
   { title: "Announcements & Advisories", href: "/user/announcements" },
   { title: "Profile", href: "/user/profile" },
@@ -51,15 +45,9 @@ export const adminNavigation: NavSection[] = [
     title: "Requests & Approvals",
     items: [
       { title: "Queue", href: "/admin/requests-approvals/queue" },
-      {
-        title: "Issued Documents",
-        href: "/admin/requests-approvals/issued-documents",
-      },
     ],
   },
-  { title: "Payments & Cashiering", href: "/admin/payments-cashiering" },
   { title: "Residents & Households", href: "/admin/residents-households" },
-  { title: "Business & Permits", href: "/admin/business-permits" },
   { title: "Blotter & Mediation", href: "/admin/blotter-mediation" },
   {
     title: "Health Center",
@@ -68,11 +56,9 @@ export const adminNavigation: NavSection[] = [
         title: "Appointments & Queue",
         href: "/admin/health-center/appointments",
       },
-      { title: "Services", href: "/admin/health-center/services" },
-      { title: "Basic Reports", href: "/admin/health-center/reports" },
+      { title: "Audit Trails", href: "/admin/health-center/audit-trails" },
     ],
   },
-  { title: "Facilities & Inventory", href: "/admin/facilities-inventory" },
   { title: "Announcements & Broadcast", href: "/admin/announcements" },
   {
     title: "Settings",
