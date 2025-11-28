@@ -1,12 +1,12 @@
 "use client";
 
-import { PageHeader } from "@/components/layouts/page-header";
 import { useState, useEffect, useCallback } from "react";
 import {
   AnnouncementCard,
   type Announcement,
 } from "@/components/announcement-card";
 import { createClient } from "@/utils/supabase/client";
+import { PageHeader } from "@/components/layouts/page-header";
 
 export default function Page() {
   const supabase = createClient();
@@ -56,20 +56,77 @@ export default function Page() {
         title="Announcements & Advisories"
         description="Latest barangay updates and advisories."
       />
-      <div className="rounded-lg border border-dashed bg-background/60 p-10 text-center text-muted-foreground">
-        <h1 className="text-lg font-semibold">Announcements & Advisories</h1>
-        <div className="w-full max-w-5xl space-y-8">
-          <div className="text-center">
-            <p className="text-muted-foreground">
-              Stay updated with the latest news and announcements from your
-              barangay.
-            </p>
-          </div>
+
+      <div className="overflow-hidden rounded-xl border bg-gradient-to-br from-white to-muted/60 shadow-sm">
+        <div className="border-b bg-primary/5 px-4 py-3 text-sm text-primary">
+          Stay updated with official news, advisories, and community events.
+        </div>
+
+        <div className="space-y-6 p-6">
           {isLoading ? (
-            <p className="text-center">Loading announcements...</p>
+            <div className="grid gap-4 md:grid-cols-[2fr_1fr]">
+              <div className="rounded-lg border bg-background/80 p-4">
+                <div className="h-40 w-full animate-pulse rounded-md bg-muted" />
+                <div className="mt-4 h-4 w-48 animate-pulse rounded bg-muted" />
+                <div className="mt-2 h-3 w-80 animate-pulse rounded bg-muted" />
+              </div>
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-lg border bg-background/80 p-3"
+                  >
+                    <div className="h-3 w-32 animate-pulse rounded bg-muted" />
+                    <div className="mt-2 h-3 w-24 animate-pulse rounded bg-muted" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : announcements.length === 0 ? (
+            <div className="rounded-lg border border-dashed bg-muted/40 px-4 py-10 text-center text-muted-foreground">
+              No announcements yet. Please check back later.
+            </div>
           ) : (
-            <div className="flex justify-center">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <>
+              {/* Featured latest announcement */}
+              <div className="grid gap-4 md:grid-cols-[2fr_1fr]">
+                <div className="rounded-xl border bg-background/80 p-5 shadow-sm">
+                  <p className="text-xs font-semibold uppercase text-primary">
+                    Latest update
+                  </p>
+                  <h2 className="mt-2 text-xl font-semibold leading-tight">
+                    {announcements[0].title}
+                  </h2>
+                  <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">
+                    {announcements[0].content}
+                  </p>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    {announcements[0].date}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border bg-background/80 p-4 shadow-sm">
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">
+                    Quick glance
+                  </p>
+                  <div className="mt-3 space-y-3">
+                    {announcements.slice(0, 3).map((item) => (
+                      <div
+                        key={item.id}
+                        className="rounded-lg border bg-muted/40 p-3"
+                      >
+                        <p className="text-sm font-medium">{item.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.date}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Cards grid */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {announcements.map((announcement) => (
                   <AnnouncementCard
                     key={announcement.id}
@@ -77,7 +134,7 @@ export default function Page() {
                   />
                 ))}
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
