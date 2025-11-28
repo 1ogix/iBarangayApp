@@ -25,24 +25,27 @@ export function PortalShell({ sections, children }: PortalShellProps) {
 
   return (
     <div className="min-h-screen bg-muted/30">
-      <header className="sticky top-0 z-20 flex items-center justify-between border-b bg-white px-4 py-3 lg:hidden">
+      <header className="sticky top-0 z-20 flex items-center justify-between border-b border-primary/10 bg-[#131E3A] px-4 py-3 shadow-sm backdrop-blur lg:hidden">
         <Link href="/" className="flex items-center gap-3">
           <Image
             src="/Logo.svg"
             alt="BrgyGo logo"
-            width={40}
-            height={40}
-            className="h-10 w-10 object-contain"
+            width={140}
+            height={120}
+            className="h-[auto] w-[140px] object-contain"
           />
-          <span className="text-lg font-bold text-[#025AAE]">BrgyGo</span>
         </Link>
         <button
           type="button"
           onClick={() => setIsSidebarOpen((open) => !open)}
           aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
-          className="rounded-md border border-gray-200 p-2 text-gray-800 shadow-sm transition hover:bg-gray-50 active:scale-95"
+          className="rounded-md border bg-gray-50 border-gray-200 p-2 text-gray-800 shadow-sm transition active:scale-95"
         >
-          {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {isSidebarOpen ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <Menu className="h-5 w-5" />
+          )}
         </button>
       </header>
 
