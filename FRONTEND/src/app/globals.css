@@ -47,4 +47,9 @@
     color: hsl(var(--foreground));
     @apply antialiased;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
 }
