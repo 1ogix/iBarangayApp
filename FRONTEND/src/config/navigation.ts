@@ -64,10 +64,6 @@ export const adminNavigation: NavSection[] = [
     title: "Settings",
     items: [
       { title: "Roles & Access", href: "/admin/settings/roles-access" },
-      {
-        title: "Document Templates",
-        href: "/admin/settings/document-templates",
-      },
     ],
   },
   { title: "Sign Out", href: "/user/sign-out" },
