@@ -9,6 +9,7 @@ import type { Announcement } from "@/components/announcement-card";
 import { Newspaper, Briefcase, Database } from "lucide-react";
 import { motion } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
+import DotsBackground from "@/components/animation";
 
 // Landing Page Component
 export default function LandingPage() {
@@ -298,15 +299,31 @@ export default function LandingPage() {
      {/* SECTION 5: About Us */}
       <section
         id="about"
-        className="relative flex flex-col items-center bg-white px-6 pt-32 pb-32"
+        className="relative flex flex-col items-center bg-white px-6 pt-32 pb-32 overflow-hidden"
       >
+
+        {/* RIGHT-SIDE SVG Animation (BEHIND CONTENT, ALIGNED WITH TEXT DESCRIPTION) */}
+        <motion.div
+          initial={{ opacity: 0, x: 120 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          viewport={{ once: false, margin: "-100px" }}
+          className="absolute right-0 top-[55%] -translate-y-1/2 w-[320px] opacity-80 pointer-events-none select-none z-0"
+        >
+          <img
+            src="/kani blue.svg"
+            alt="Community Animation"
+            className="w-full h-auto"
+          />
+        </motion.div>
+
         {/* Heading */}
-        <div className="w-full max-w-5xl text-center mb-12">
+        <div className="w-full max-w-5xl text-center mb-12 relative z-10">
           <h2 className="text-5xl font-bold text-[#131E3A]">About Us</h2>
         </div>
 
         {/* Top Row: Logo + Text */}
-        <div className="flex flex-col md:flex-row items-center gap-8 max-w-5xl w-full">
+        <div className="flex flex-col md:flex-row items-center gap-8 max-w-5xl w-full relative z-10">
 
           {/* Logo with Circle Overlay */}
           <div className="relative flex-shrink-0 w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80">
@@ -321,11 +338,11 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Text Description, horizontally centered relative to circle */}
+          {/* Text Description */}
           <div className="flex-1 flex justify-center">
             <div className="max-w-xl text-gray-700 text-base sm:text-lg md:text-lg leading-relaxed text-justify">
               <p>
-                <span className="font-semibold text-[#1976D2]">BrgyGo</span> is an official digital platform developed to support and enhance local governance within Cebu. It  aims to modernize public service delivery through efficient, transparent, and citizen-centered digital solutions.
+                <span className="font-semibold text-[#1976D2]">BrgyGo</span> is an official digital platform developed to support and enhance local governance within Cebu. It aims to modernize public service delivery through efficient, transparent, and citizen-centered digital solutions.
               </p>
 
               <p className="mt-4">
@@ -337,11 +354,11 @@ export default function LandingPage() {
         </div>
 
         {/* Partnership Line Below Top Row */}
-        <div className="mt-12 flex items-center gap-4 justify-center">
+        <div className="mt-12 flex items-center gap-4 justify-center relative z-10">
           <p className="text-gray-700 font-medium text-center text-lg sm:text-xl">
             In Partnership With the Municipality of Cebu
           </p>
-          <div className="relative w-24 h-24 ">
+          <div className="relative w-24 h-24">
             <Image
               src="/cebu seal.png"
               alt="Cebu City Seal"
@@ -351,6 +368,8 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+
 
 
       
