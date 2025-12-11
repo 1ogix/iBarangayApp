@@ -9,6 +9,7 @@ import type { Announcement } from "@/components/announcement-card";
 import { Newspaper, Briefcase, Database } from "lucide-react";
 import { motion } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
+import DotsBackground from "@/components/animation";
 
 // Landing Page Component
 export default function LandingPage() {
@@ -45,6 +46,7 @@ export default function LandingPage() {
     }
     setIsLoading(false);
   }, [supabase]);
+
   // Fetch announcements on component mount
   // and when fetchAnnouncements changes
   // (which is stable due to useCallback)
@@ -56,41 +58,44 @@ export default function LandingPage() {
   // static datas for the government services section
   const governmentServices = [
     {
-      title: "Document Requests",
+      title: "Barangay Services",
       imageUrl:
-        "https://images.pexels.com/photos/7821517/pexels-photo-7821517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "/Cebu_City_Hall_Aerial.jpg",
       description:
-        "Easily request and track important documents online, reducing wait times and paperwork.",
+        "Access your barangay permits and certificates in one convenient place—fast, simple, and hassle-free.",
     },
     {
-      title: "Appointment Scheduling",
+      title: "Report a Concern",
       imageUrl:
-        "https://images.pexels.com/photos/4348401/pexels-photo-4348401.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "/tanod.jpg",
       description:
-        "Book appointments with barangay officials for various services at your convenience.",
+        "Help keep the community safe by reporting issues directly to your barangay with just a few taps.",
     },
     {
       title: "Community Announcements",
       imageUrl:
-        "https://images.pexels.com/photos/16038319/pexels-photo-16038319/free-photo-of-a-sign-for-the-barangay-hall-in-the-philippines.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "/announce.jpg",
       description:
-        "Stay informed with the latest news and updates from your barangay.",
+        "Never miss an update—get the latest barangay news, events, and important advisories instantly.",
     },
     {
-      title: "Payment Processing",
+      title: "Document Downloadables",
       imageUrl:
-        "https://images.pexels.com/photos/6994992/pexels-photo-6994992.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "/download.avif",
       description:
-        "Make secure payments for barangay services directly through the platform.",
+        "Easily download official forms and documents whenever you need them—complete with QR verification.",
     },
+    
   ];
 
   return (
     // Use a main tag to wrap all sections for better semantics
     <main className="flex flex-col">
+      
       {/* SECTION 1: Hero */}
-      <section className="relative flex h-screen flex-col justify-center gap-8 bg-[url('/cebu_city_hall.jpg')] bg-cover bg-center px-5 py-20 pt-20 text-white md:px-20 md:py-24">
-        {/* Overlay for better text readability */}
+      <section className="relative flex h-screen flex-col justify-center gap-8 bg-[url('/cebu_city_hall.jpg')] bg-cover bg-center px-5 py-20 text-white md:px-20 md:py-24">
+       
+       {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-[#1976D2] opacity-60 shadow-[0px_4px_8px_0px_rgba(25,118,210,0.20)]"></div>
 
         <motion.div
@@ -109,14 +114,14 @@ export default function LandingPage() {
             className="text-4xl max-w-7xl font-heading font-black italic sm:text-5xl md:text-7xl"
           >
             Brgy
-            <span className="text-[#00FFFF]">Go</span>: Your Digital Gateway to
-            Barangay Services
+            <span className="text-[#00FFFF]">Go</span>
+            : Your Digital Gateway to Barangay Services
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg font-thin text-white font-sans tracking-wide leading-relaxed drop-shadow-md"
+            className="text-lg font-thin  text-white font-sans tracking-wide leading-relaxed drop-shadow-md"
           >
             Bringing government services closer to the people of our community.
           </motion.p>
@@ -125,9 +130,10 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative z-10 flex flex-row gap-4"
+          className="relative flex flex-row gap-4"
         >
-          {/* === Get Started Button === */}
+        
+        {/* === Get Started Button === */}
           <Button
             asChild
             className="bg-[#131E3A] text-white text-lg font-semibold px-4 py-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white hover:text-[#131E3A] border-2 border-[#131E3A]"
@@ -135,7 +141,8 @@ export default function LandingPage() {
             <Link href="/signup">Get Started</Link>
           </Button>
 
-          {/* === Explore Features Button === */}
+        
+        {/* === Explore Features Button === */}
           <Button
             asChild
             className="bg-[#1976D2]/10 text-white border-2 border-white text-lg font-semibold px-4 py-4 rounded-xl shadow-md transition-all duration-300 hover:bg-white hover:text-[#131E3A]"
@@ -144,185 +151,233 @@ export default function LandingPage() {
           </Button>
         </motion.div>
       </section>
-
-      {/* SECTION 2: Services */}
+    
+     {/* SECTION 2: Services */}
       <section
         id="services"
-        className="flex flex-col justify-center items-center bg-slate-50 px-6 py-16"
+        className="min-h-screen flex flex-col bg-slate-50 px-6 pt-32 pb-32"
       >
-        <div className="w-full max-w-4xl space-y-8">
-          <div className="text-center">
-            <h2 className="text-5xl font-bold text-[#131E3A]">
-              Government Services
-            </h2>
-            <p className="text-muted-foreground">
-              Discover the comprehensive services BrgyGo offers to streamline
-              barangay operations and enhance citizen engagement.
-            </p>
-          </div>
-        </div>
+        {/* Section Title */}
+        <h2 className="text-5xl font-bold text-center text-[#131E3A] mb-3">
+          Government Services
+        </h2>
 
-        {/* Government services cards from static data */}
-        <div className="grid mt-6 w-full max-w-4xl grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-2">
-          {governmentServices.map((service) => (
-            <div
-              key={service.title}
-              className="rounded-2xl border bg-white text-left shadow-sm"
-            >
-              {service.imageUrl && (
-                <div className="relative mb-4 h-40 w-full overflow-hidden rounded-t-md">
-                  <Image
-                    src={service.imageUrl}
-                    alt={service.title}
-                    fill
-                    className="object-cover"
-                  />
+        <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+          Apply for permits, submit concerns, and access official barangay documents—all in one place.
+        </p>
+
+        {/* Content - occupies remaining space */}
+        <div className="flex-1 flex justify-center items-center mt-10">
+          <div className="grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+            {governmentServices.map((service) => (
+              <motion.div
+                key={service.title}
+                layout
+                whileHover={{ y: -10, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 220, damping: 18 }}
+                className="relative rounded-2xl border bg-white text-left shadow-sm overflow-hidden group"
+              >
+                {service.imageUrl && (
+                  <div className="relative mb-4 h-40 w-full overflow-hidden rounded-t-md">
+                    <Image
+                      src={service.imageUrl}
+                      alt={service.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+
+                {/* Description with overlay */}
+                <div className="relative p-6 overflow-hidden rounded-b-2xl group">
+                  {/* Overlay div */}
+                  <div className="absolute inset-0 bg-[#131E3A] opacity-0 transition-opacity duration-300 group-hover:opacity-100 rounded-b-2xl z-0"></div>
+
+                  <div className="relative z-10 group-hover:text-white transition-colors duration-300">
+                    <h3 className="text-xl font-semibold">{service.title}</h3>
+                    <p 
+                      className="mt-2 text-sm group-hover:text-white">
+                      {service.description}
+                    </p>
+                  </div>
                 </div>
-              )}
-              <div className="p-6">
-                <h3 className="text-xl font-semibold">{service.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {service.description}
-                </p>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* SECTION 2: Features */}
+
+     {/* SECTION 3: Features */}
       <section
         id="features"
-        className="flex justify-center bg-white px-6 py-16"
+        className="h-screen flex flex-col bg-white px-6 pt-32 pb-32"
       >
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="grid w-full max-w-4xl gap-6 rounded-2xl border bg-white p-8 text-left shadow-sm md:grid-cols-3"
-        >
-          {[
-            {
-              title: "Citizen Services",
-              description:
-                "Apply for documents, track requests, and book appointments online.",
-              icon: <Newspaper className="h-8 w-8 text-blue-600" />,
-            },
-            {
-              title: "Operations Hub",
-              description:
-                "Streamline approvals, records, payments, and community broadcasts.",
-              icon: <Briefcase className="h-8 w-8 text-blue-600" />,
-            },
-            {
-              title: "Supabase Ready",
-              description:
-                "Built to integrate with Supabase for auth, data, and automation.",
-              icon: <Database className="h-8 w-8 text-blue-600" />,
-            },
-          ].map((feature) => (
-            <div key={feature.title} className="space-y-2">
-              {feature.icon}
-              <h3 className="text-xl font-semibold">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">
-                {feature.description}
-              </p>
-            </div>
-          ))}
-        </motion.div>
-      </section>
+        {/* Section Title */}
+        <h2 className="text-5xl font-bold text-center text-[#131E3A] mb-3">
+          Features
+        </h2>
 
-      {/* SECTION 3: Announcements */}
-      <section
-        id="announcements"
-        className="flex justify-center bg-slate-50 px-6 py-16"
-      >
-        <div className="w-full max-w-4xl space-y-8">
-          <div className="text-center">
-            <h2 className="text-5xl font-bold text-[#131E3A]">
-              Latest Announcements
-            </h2>
-            <p className="text-muted-foreground">
-              Stay updated with the latest news and announcements from your
-              barangay.
-            </p>
-          </div>
-          {isLoading ? (
-            <p className="text-center">Loading announcements...</p>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {announcements.map((announcement) => (
-                <AnnouncementCard
-                  key={announcement.id}
-                  announcement={announcement}
-                />
-              ))}
-            </div>
-          )}
+        <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+          Explore the core capabilities that make BrgyGo efficient, user-friendly, and modern.
+        </p>
+
+        {/* Content Container */}
+        <div className="flex-1 flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="grid w-full max-w-4xl gap-8 rounded-2xl border bg-white p-12 shadow-sm md:grid-cols-3"
+          >
+            {[            
+              {
+                title: "Citizen Services",
+                description:
+                  "Apply for documents, track requests, and book appointments online.",
+                icon: <Newspaper className="h-12 w-12 text-blue-600" />,
+              },
+              {
+                title: "Operations Hub",
+                description:
+                  "Streamline approvals, records, payments, and community broadcasts.",
+                icon: <Briefcase className="h-12 w-12 text-blue-600" />,
+              },
+              {
+                title: "Supabase Ready",
+                description:
+                  "Built to integrate with Supabase for authentication, data storage, and automation.",
+                icon: <Database className="h-12 w-12 text-blue-600" />,
+              },
+            ].map((feature) => (
+              <div key={feature.title} className="space-y-4 text-center">
+                <div className="flex justify-center">{feature.icon}</div>
+                <h3 className="text-2xl font-semibold">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* SECTION 4: About Us */}
+
+     {/* SECTION 4: Announcements */}
+      <section
+        id="announcements"
+        className="h-screen flex flex-col bg-slate-50 px-6 pt-32 pb-32"
+      >
+        {/* Title */}
+        <div className="text-center mb-6">
+          <h2 className="text-5xl font-bold text-[#131E3A]">Latest Announcements</h2>
+          <p className="text-muted-foreground">
+            Stay updated with the latest news and announcements from your barangay.
+          </p>
+        </div>
+
+        {/* Content (centered vertically) */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-full max-w-5xl">
+            {isLoading ? (
+              <p className="text-center text-lg">Loading announcements...</p>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {announcements.map((announcement) => (
+                  <AnnouncementCard
+                    key={announcement.id}
+                    announcement={announcement}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+
+     {/* SECTION 5: About Us */}
       <section
         id="about"
-        className="flex flex-col items-center bg-white px-6 py-16 text-center"
+        className="relative flex flex-col items-center bg-white px-6 pt-32 pb-32 overflow-hidden"
       >
-        <div className="w-full max-w-5xl space-y-8">
+        
+        {/* Heading */}
+        <div className="w-full max-w-5xl text-center mb-12 relative z-10">
           <h2 className="text-5xl font-bold text-[#131E3A]">About Us</h2>
+        </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mt-8">
-            {/* Image */}
-            <div className="w-72 h-72 relative">
+        {/* Top Row: Logo + Text */}
+        <div className="flex flex-col md:flex-row items-center gap-8 max-w-5xl w-full relative z-10">
+
+          {/* Logo with Circle Overlay */}
+          <div className="relative flex-shrink-0 w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80">
+            <div className="absolute inset-0 bg-[#2E5090] rounded-full shadow-lg z-0"></div>
+            <div className="relative w-full h-full z-10">
               <Image
-                src="/cebu seal.png"
-                alt="Cebu City Seal"
+                src="/Logo.svg"
+                alt="Logo"
                 fill
                 className="object-contain"
               />
             </div>
+          </div>
 
-            {/* Text */}
-            <div className="max-w-2xl text-gray-700 leading-relaxed text-justify">
+          {/* Text Description */}
+          <div className="flex-1 flex justify-center">
+            <div className="max-w-xl text-gray-700 text-base sm:text-lg md:text-lg leading-relaxed text-justify">
               <p>
-                The Cebu City Hall stands as a proud symbol of governance and
-                heritage in the heart of Cebu. Established in the early 20th
-                century, it has served as the center of local administration,
-                providing public services and preserving Cebu’s rich history.
-                Today, through digital initiatives like{" "}
-                <span className="font-semibold text-[#1976D2]">BrgyGo</span>,
-                the city continues to bridge modern technology with civic
-                engagement, empowering citizens and fostering transparency.
+                <span className="font-semibold text-[#1976D2]">BrgyGo</span> is an official digital platform developed to support and enhance local governance within Cebu. It aims to modernize public service delivery through efficient, transparent, and citizen-centered digital solutions.
+              </p>
+
+              <p className="mt-4">
+                The platform streamlines essential barangay processes, reduces paperwork, minimizes delays, and ensures that residents can access services in a faster and more convenient way.
               </p>
             </div>
           </div>
+
         </div>
+
+        
       </section>
 
-      {/* SECTION 5: Visit Us */}
+
+
+
+      
+
+     {/* SECTION 5: Visit Us */}
       <section
         id="visit-us"
-        className="flex flex-col justify-center items-center bg-white px-6 py-20"
+        className="h-screen flex flex-col bg-slate-50 px-6 pt-32 pb-32"
       >
-        <div className="w-full max-w-4xl space-y-8 text-center">
-          <h2 className="text-5xl font-bold text-[#131E3A]">Visit Us</h2>
-          <p className="text-muted-foreground">
-            Come and visit us at Cebu City Hall — your local Barangay Office is
-            ready to assist you.
-          </p>
 
-          <div className="mt-8 flex justify-center">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62712.40274251852!2d123.8316483!3d10.3156995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a9993bb6d4a58f%3A0x9cf7c84a76b6d46f!2sCebu%20City%20Hall!5e0!3m2!1sen!2sph!4v1708300000000!5m2!1sen!2sph"
-              width="100%"
-              height="450"
-              allowFullScreen
-              loading="lazy"
-              className="rounded-2xl shadow-lg border border-gray-200"
-              title="Cebu City Hall Location"
-            ></iframe>
+        {/* Top Title Section */}
+        <div className="text-center w-full max-w-4xl mx-auto">
+          <h2 className="text-5xl font-bold text-[#131E3A]">Visit Us</h2>
+          <p className="text-muted-foreground mt-2">
+            Come and visit us at Cebu City Hall — your local Barangay Office is ready to assist you.
+          </p>
+        </div>
+
+        {/* Content Centering */}
+        <div className="flex-1 flex items-center justify-center w-full mt-6">
+          <div className="w-full max-w-4xl px-2">
+
+            {/* Map */}
+            <div className="w-full h-[450px]">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62712.40274251852!2d123.8316483!3d10.3156995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a9993bb6d4a58f%3A0x9cf7c84a76b6d46f!2sCebu%20City%20Hall!5e0!3m2!1sen!2sph!4v1708300000000!5m2!1sen!2sph"
+                allowFullScreen
+                loading="lazy"
+                className="w-full h-full rounded-2xl shadow-lg border border-gray-200"
+              ></iframe>
+            </div>
+
           </div>
         </div>
       </section>
+
     </main>
   );
 }
