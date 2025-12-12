@@ -294,9 +294,6 @@ export default function Page() {
                       </p>
                     )}
                     <DialogFooter className="gap-2 sm:gap-3">
-                      <Button type="button" variant="outline" asChild>
-                        <Link href="/user/my-requests">Track my requests</Link>
-                      </Button>
                       <Button type="submit" disabled={isSubmitting}>
                         {isSubmitting ? "Sending..." : "Send message"}
                       </Button>
