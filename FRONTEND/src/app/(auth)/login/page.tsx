@@ -1,12 +1,14 @@
 'use client';
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { login } from "./actions";
 
-export default function LoginPage({ searchParams }: { searchParams: { message: string } }) {
-  const message = searchParams.message;
+export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-6 py-12">
