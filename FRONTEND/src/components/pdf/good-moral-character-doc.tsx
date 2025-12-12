@@ -13,7 +13,9 @@ import {
 
 const baseUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000");
 
 Font.register({
   family: "Poppins",
@@ -143,8 +145,8 @@ export const GoodMoralCharacterDoc = ({
   ctcNo = "__________",
   issuedAt = "__________",
   issuedOn = "__________",
-  cityLogoUrl = "public/images/cebu-icon.png",
-  philSealUrl = "public/images/phil_seal.png",
+  cityLogoUrl = `${baseUrl}/images/cebu-icon.png`,
+  philSealUrl = `${baseUrl}/images/phil_seal.png`,
   signatureUrl,
   qrCodeUrl,
   refNo = "#############",
@@ -175,9 +177,9 @@ export const GoodMoralCharacterDoc = ({
           {`${firstName} ${middleInitial}. ${lastName}`}
         </Text>
         , {age} years old and a resident of{" "}
-        <Text style={styles.bold}>{address}</Text>, Barangay {barangay},{" "}
-        {city}, has been known to this barangay as a person of good moral
-        standing and exemplary conduct.
+        <Text style={styles.bold}>{address}</Text>, Barangay {barangay}, {city},
+        has been known to this barangay as a person of good moral standing and
+        exemplary conduct.
       </Text>
       <Text style={styles.body}>
         Based on our records and the statements of the community, the
