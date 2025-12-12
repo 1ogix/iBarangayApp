@@ -31,7 +31,6 @@ export const userNavigation: NavSection[] = [
   },
   { title: "My Requests", href: "/user/my-requests" },
   { title: "Appointments", href: "/user/appointments" },
-  { title: "Payments & Receipts", href: "/user/payments-receipts" },
   { title: "Announcements & Advisories", href: "/user/announcements" },
   { title: "Profile", href: "/user/profile" },
   { title: "Help & Support", href: "/user/help-support" },
