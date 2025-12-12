@@ -153,8 +153,8 @@ export const BarangayClearanceDoc = ({
   ctcNo = "__________",
   issuedAt = "__________",
   issuedOn = "__________",
-  cityLogoUrl = "public/images/cebu-icon.png",
-  philSealUrl = "public/images/phil_seal.png",
+  cityLogoUrl = `${baseUrl}/images/cebu-icon.png`,
+  philSealUrl = `${baseUrl}/images/phil_seal.png`,
   signatureUrl, // TODO: Pass this from form submission/database
   qrCodeUrl, // TODO: Generate this and pass it
   refNo = "#############",
@@ -167,7 +167,7 @@ export const BarangayClearanceDoc = ({
         {/* Watermark: Apply the watermark style to the Image component */}
         <Image
           style={styles.watermark}
-          src={"public/images/watermark-logo.png"}
+          src={`${baseUrl}/images/watermark-logo.png`}
           fixed
         />
         {/* Header */}
