@@ -1,6 +1,19 @@
 import { PageHeader } from "@/components/layouts/page-header";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { createClient } from "@/utils/supabase/server";
 
 type RequestRow = {
@@ -8,7 +21,6 @@ type RequestRow = {
   type: string;
   status: string | null;
   created_at: string | null;
-  last_name?: string | null;
 };
 
 type AppointmentRow = {
@@ -29,39 +41,64 @@ export default async function Page() {
   const supabase = await createClient();
 
   // Summary counts
-  const [{ count: totalRequests }, { count: pendingRequests }, { count: totalAppointments }, { count: upcomingAppointments }] =
-    await Promise.all([
-      supabase.from("requests").select("*", { count: "exact", head: true }),
-      supabase.from("requests").select("*", { count: "exact", head: true }).eq("status", "pending"),
-      supabase.from("appointments").select("*", { count: "exact", head: true }),
-      supabase
-        .from("appointments")
-        .select("*", { count: "exact", head: true })
-        .neq("status", "Completed"),
-    ]);
+  const [
+    { count: totalRequests },
+    { count: pendingRequests },
+    { count: totalAppointments },
+    { count: upcomingAppointments },
+  ] = await Promise.all([
+    supabase.from("requests").select("*", { count: "exact", head: true }),
+    supabase
+      .from("requests")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending"),
+    supabase.from("appointments").select("*", { count: "exact", head: true }),
+    supabase
+      .from("appointments")
+      .select("*", { count: "exact", head: true })
+      .neq("status", "Completed"),
+  ]);
 
   // Recent activity
-  const [{ data: recentRequests, error: recentRequestsError }, { data: recentAppointments, error: recentAppointmentsError }] =
-    await Promise.all([
-      supabase
-        .from("requests")
-        .select("id,type,status,created_at,last_name")
-        .order("created_at", { ascending: false })
-        .limit(5),
-      supabase
-        .from("appointments")
-        .select("id,type,status,schedule_at")
-        .order("schedule_at", { ascending: true })
-        .limit(5),
-    ]);
+  const [
+    { data: recentRequests, error: recentRequestsError },
+    { data: recentAppointments, error: recentAppointmentsError },
+  ] = await Promise.all([
+    supabase
+      .from("requests")
+      .select("id,type,status,created_at")
+      .order("created_at", { ascending: false })
+      .limit(5),
+    supabase
+      .from("appointments")
+      .select("id,type,status,schedule_at")
+      .order("schedule_at", { ascending: true })
+      .limit(5),
+  ]);
 
   const hasError = recentRequestsError || recentAppointmentsError;
 
   const stats = [
-    { label: "Total requests", value: totalRequests ?? 0, hint: "All submitted forms" },
-    { label: "Pending approvals", value: pendingRequests ?? 0, hint: "Awaiting review" },
-    { label: "Appointments", value: totalAppointments ?? 0, hint: "All booked visits" },
-    { label: "Upcoming visits", value: upcomingAppointments ?? 0, hint: "Not yet completed" },
+    {
+      label: "Total requests",
+      value: totalRequests ?? 0,
+      hint: "All submitted forms",
+    },
+    {
+      label: "Pending approvals",
+      value: pendingRequests ?? 0,
+      hint: "Awaiting review",
+    },
+    {
+      label: "Appointments",
+      value: totalAppointments ?? 0,
+      hint: "All booked visits",
+    },
+    {
+      label: "Upcoming visits",
+      value: upcomingAppointments ?? 0,
+      hint: "Not yet completed",
+    },
   ];
 
   return (
@@ -93,7 +130,9 @@ export default async function Page() {
         <Card>
           <CardHeader>
             <CardTitle>Recent requests</CardTitle>
-            <CardDescription>Latest submissions across services.</CardDescription>
+            <CardDescription>
+              Latest submissions across services.
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <Table>
@@ -109,15 +148,24 @@ export default async function Page() {
                 {recentRequests && recentRequests.length > 0 ? (
                   (recentRequests as RequestRow[]).map((request) => (
                     <TableRow key={request.id}>
-                      <TableCell className="font-mono text-xs">{request.id}</TableCell>
-                      <TableCell className="font-medium">{request.type}</TableCell>
-                      <TableCell className="capitalize">{request.status ?? "—"}</TableCell>
+                      <TableCell className="font-mono text-xs">
+                        {request.id}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {request.type}
+                      </TableCell>
+                      <TableCell className="capitalize">
+                        {request.status ?? "—"}
+                      </TableCell>
                       <TableCell>{formatDate(request.created_at)}</TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={4} className="py-6 text-center text-sm text-muted-foreground">
+                    <TableCell
+                      colSpan={4}
+                      className="py-6 text-center text-sm text-muted-foreground"
+                    >
                       No recent requests.
                     </TableCell>
                   </TableRow>
@@ -130,7 +178,9 @@ export default async function Page() {
         <Card>
           <CardHeader>
             <CardTitle>Upcoming appointments</CardTitle>
-            <CardDescription>Next visits to the barangay office or health center.</CardDescription>
+            <CardDescription>
+              Next visits to the barangay office or health center.
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <Table>
@@ -143,16 +193,27 @@ export default async function Page() {
               </TableHeader>
               <TableBody>
                 {recentAppointments && recentAppointments.length > 0 ? (
-                  (recentAppointments as AppointmentRow[]).map((appointment) => (
-                    <TableRow key={appointment.id}>
-                      <TableCell className="font-medium">{appointment.type}</TableCell>
-                      <TableCell className="capitalize">{appointment.status ?? "—"}</TableCell>
-                      <TableCell>{formatDate(appointment.schedule_at)}</TableCell>
-                    </TableRow>
-                  ))
+                  (recentAppointments as AppointmentRow[]).map(
+                    (appointment) => (
+                      <TableRow key={appointment.id}>
+                        <TableCell className="font-medium">
+                          {appointment.type}
+                        </TableCell>
+                        <TableCell className="capitalize">
+                          {appointment.status ?? "—"}
+                        </TableCell>
+                        <TableCell>
+                          {formatDate(appointment.schedule_at)}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={3} className="py-6 text-center text-sm text-muted-foreground">
+                    <TableCell
+                      colSpan={3}
+                      className="py-6 text-center text-sm text-muted-foreground"
+                    >
                       No upcoming appointments.
                     </TableCell>
                   </TableRow>
