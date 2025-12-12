@@ -1,12 +1,13 @@
-'use client';
+"use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { login } from "./actions";
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
 
@@ -67,5 +68,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-center text-sm text-muted-foreground">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
