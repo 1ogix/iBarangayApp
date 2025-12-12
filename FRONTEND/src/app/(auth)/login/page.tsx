@@ -1,12 +1,15 @@
-'use client';
+"use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { login } from "./actions";
 
-export default function LoginPage({ searchParams }: { searchParams: { message: string } }) {
-  const message = searchParams.message;
+function LoginContent() {
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-6 py-12">
@@ -65,5 +68,13 @@ export default function LoginPage({ searchParams }: { searchParams: { message: s
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-center text-sm text-muted-foreground">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

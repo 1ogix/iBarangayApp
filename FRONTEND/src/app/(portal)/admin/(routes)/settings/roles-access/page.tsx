@@ -78,14 +78,24 @@ export default function Page() {
     setMessage(null);
     setError(null);
     try {
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ role: profile.role })
-        .eq("id", profile.id);
-      if (updateError) {
-        setError("Failed to save role. Please try again.");
+      const response = await fetch("/api/admin/profiles/update-role", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: profile.id, role: profile.role ?? "user" }),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        setError(
+          (result as { error?: string } | null)?.error ??
+            "Failed to save role. Please try again."
+        );
         return;
       }
+
       setMessage("Role updated.");
     } catch (err) {
       setError("Failed to save role. Please try again.");
